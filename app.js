@@ -8,9 +8,17 @@ var bodyParser = require('body-parser');
 var io = require('./sockets');
 
 var routes = require('./routes/index');
+var DbInitializer = require('./database/DbInitializer');
+
+try {
+    var dbInitializer = new DbInitializer();
+    dbInitializer.initialize();
+} catch (err) {
+    console.error("Please specify the database connection in the environment variables");
+    console.error('\"' + err.name + '\" thrown: ' + err.message);
+}
 
 app.io = io;
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
