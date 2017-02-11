@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+    db:
+      build: ./db
+      volumes:
+       - db_data:/data/db
+      restart: always
+
+    app:
+      depends_on:
+        - db
+      build: ./app
+      ports:
+       - "8080:8080"
+      restart: always
+      environment:
+        DB_HOST: db:27017
+
+volumes:
+    db_data:

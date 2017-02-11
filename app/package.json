@@ -1,6 +1,6 @@
 {
   "name": "PoolController",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -12,11 +12,13 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
     "ejs": "~2.4.1",
+    "events": "^1.1.1",
     "express": "~4.13.4",
+    "mongodb": "^2.2.22",
     "morgan": "~1.7.0",
-    "mysql": "latest",
-    "node-mysql": "^0.4.2",
     "serve-favicon": "~2.3.0",
-    "socket.io": "^1.5.0"
+    "socket.io": "^1.5.0",
+    "util": "^0.10.3",
+    "winston": "^2.3.1"
   }
 }
