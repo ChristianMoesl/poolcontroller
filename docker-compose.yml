@@ -2,12 +2,14 @@ version: '2'
 
 services:
     db:
+      container_name: poolcontroller_db
       build: ./db
       volumes:
        - db_data:/data/db
       restart: always
 
     app:
+      container_name: poolcontroller_app
       depends_on:
         - db
       build: ./app
@@ -16,6 +18,7 @@ services:
       restart: always
       environment:
         DB_HOST: db:27017
+      entrypoint: ["npm", "start" ]
 
 volumes:
     db_data:
