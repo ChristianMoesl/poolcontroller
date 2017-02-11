@@ -1,17 +1,13 @@
 const PoolController = require('./services/PoolController/PoolController');
 
-var express = require('express');
-var app = express();
-var path = require('path');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var io = require('./sockets');
+const express = require('express');
+const app = express();
+const path = require('path');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const winston = require('winston');
-
-var routes = require('./routes/index');
-
-app.io = io;
+const routes = require('./routes/index');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -36,7 +32,7 @@ app.use(function(req, res, next) {
 
 // Test database connection
 console.log("Connecting to database on: " + process.env.DB_HOST + "/poolcontroller");
-var MongoClient = require('mongodb').MongoClient;
+const MongoClient = require('mongodb').MongoClient;
 
 MongoClient.connect('mongodb://' + process.env.DB_HOST + '/poolcontroller', function(err, db) {
     if (!err)
