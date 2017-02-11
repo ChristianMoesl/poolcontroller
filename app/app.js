@@ -1,4 +1,5 @@
-require('./controller/pool-controller');
+const PoolController = require('./services/PoolController/PoolController');
+
 var express = require('express');
 var app = express();
 var path = require('path');
@@ -6,17 +7,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var io = require('./sockets');
+const winston = require('winston');
 
 var routes = require('./routes/index');
-var DbInitializer = require('./database/DbInitializer');
-
-try {
-    var dbInitializer = new DbInitializer();
-    dbInitializer.initialize();
-} catch (err) {
-    console.error("Please specify the database connection in the environment variables");
-    console.error('\"' + err.name + '\" thrown: ' + err.message);
-}
 
 app.io = io;
 
@@ -39,6 +32,17 @@ app.use(function(req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
+});
+
+// Test database connection
+console.log("Connecting to database on: " + process.env.DB_HOST + "/poolcontroller");
+var MongoClient = require('mongodb').MongoClient;
+
+MongoClient.connect('mongodb://' + process.env.DB_HOST + '/poolcontroller', function(err, db) {
+    if (!err)
+        console.log("We are connected");
+    else
+        console.log(err);
 });
 
 // error handlers

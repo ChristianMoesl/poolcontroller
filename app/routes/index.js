@@ -1,4 +1,4 @@
-var poolController = require('../controller/pool-controller');
+var poolController = require('../services/PoolController/PoolController');
 var express = require('express');
 var router = express.Router();
 var io = require('../sockets');
@@ -6,15 +6,16 @@ var io = require('../sockets');
 var ioNamespace = '/my-namespace';
 var nsp = io.of('/index');
 
-var tempSensor = poolController.roofTempSensor;
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', {
-        title: 'PoolController',
-        temperature: tempSensor.getTemperature(),
-        ioNamespace: ioNamespace
-    });
+    res.render('index', Object.assign(
+        {
+            title: 'Pool Controller',
+            ioNamespace: ioNamespace,
+            roofTemperatureSensorName: 'Roof temperature sensor',
+        },
+        poolController.getStatus()
+    ));
 });
 
 nsp.on('connection', function(socket){
@@ -24,8 +25,8 @@ nsp.on('connection', function(socket){
     });
 });
 
-tempSensor.temperatureChanged.push(function(temperature) {
-    nsp.emit('status', temperature);
+poolController.on('change', function(args) {
+    nsp.emit('status', args);
 });
 
 module.exports = router;
