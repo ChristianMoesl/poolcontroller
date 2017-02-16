@@ -1,4 +1,5 @@
-const EventEmitter = require('events').EventEmitter;
+import { EventEmitter } from 'events';
+
 const util = require('util');
 
 function Pump(name) {
@@ -19,7 +20,7 @@ function Pump(name) {
     this.getTime = () => time;
 
     function change() {
-        self.emit('change', {name: name, value: state, time: time});
+        self.emit('change', { name, value: state, time });
     }
 
     function setState(newState) {
@@ -29,7 +30,7 @@ function Pump(name) {
 
     function tick() {
         if (state === on) {
-            time++;
+            time += 1;
             change();
         }
     }
