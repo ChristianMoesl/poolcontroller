@@ -1,1 +1,5 @@
 /node_modules
+Server.js
+Server.js.map
+/src/server/webpack.config.js
+*.log

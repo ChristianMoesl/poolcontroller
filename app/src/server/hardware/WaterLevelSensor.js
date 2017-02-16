@@ -2,11 +2,11 @@ const EventEmitter = require('events').EventEmitter;
 const util = require('util');
 
 function WaterLevelSensor(name) {
-
     EventEmitter.call(this);
 
-    if (typeof name !== 'string')
+    if (typeof name !== 'string') {
         throw Error('Please specify a name!');
+    }
 
     let waterLevel = 50;
     const self = this;
@@ -18,11 +18,11 @@ function WaterLevelSensor(name) {
 
     function setWaterLevel(value) {
         waterLevel = value;
-        self.emit('change', {waterLevel: waterLevel});
+        self.emit('change', { waterLevel });
     }
 
     function tick() {
-        let newWaterLevel = waterLevel + Math.random() * 2 - 1;
+        const newWaterLevel = waterLevel + Math.random() * 2 - 1;
 
         if (waterLevel > 100) {
             waterLevel = 100;
