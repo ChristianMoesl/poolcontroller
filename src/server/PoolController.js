@@ -9,6 +9,10 @@ const State = Object.freeze({
     idle: {},
 });
 
+const outputAddress = 32;
+const intputAddresses = [56, 57];
+const analogAddress = 104;
+
 class PoolController extends EventEmitter {
     constructor() {
         super();

@@ -1,6 +1,7 @@
 const debug = process.env.NODE_ENV === 'development';
 const path = require('path');
 const fs = require('fs');
+const webpack = require('webpack');
 
 if (debug) {
     fs.createReadStream('webpack.client.config.js').pipe(fs.createWriteStream('./src/server/webpack.config.js'));
@@ -40,4 +41,7 @@ module.exports = {
         __dirname: false,
         __filename: false,
     },
+    plugins: [
+        new webpack.NoEmitOnErrorsPlugin(),
+    ],
 };

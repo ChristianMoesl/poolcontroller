@@ -6,7 +6,7 @@ const webpack = require('webpack');
 
 module.exports = {
     context: path.join(__dirname, './src/client'),
-    devtool: debug ? 'inline-sourcemap' : null,
+    devtool: debug ? 'inline-sourcemap' : false,
     entry: debug ? ['webpack-hot-middleware/client', './Client.js'] : './Client.js',
     module: {
         loaders: [
@@ -26,15 +26,13 @@ module.exports = {
         ],
     },
     output: {
-        path: path.join(__dirname, '../public/'),
-        filename: 'javascripts/client.min.js',
+        path: path.join(__dirname, 'public'),
+        filename: 'Client.min.js',
     },
     plugins: debug ? [
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.HotModuleReplacementPlugin(),
     ] : [
-        new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
     ],
 };

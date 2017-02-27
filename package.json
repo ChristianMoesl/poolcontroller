@@ -4,10 +4,12 @@
   "description": "",
   "private": true,
   "scripts": {
-    "build": "webpack --config ./webpack.server.config.js",
-    "start": "node %NODE_DEBUG_OPTION% ./Server.js",
-    "dev": "npm run build && npm run start",
-    "debug": "node --debug=5858 ./Server.js"
+    "build:server": "webpack --config ./webpack.server.config.js",
+    "build:client": "webpack --config ./webpack.client.config.js",
+    "start": "node ./Server.js",
+    "debug": "node %NODE_DEBUG_OPTION% ./Server.js",
+    "dev": "npm run build:server && npm run debug",
+    "remote-debug": "node --debug=5858 ./Server.js"
   },
   "main": "webpack.config.js",
   "dependencies": {
@@ -30,7 +32,8 @@
     "serve-favicon": "~2.3.0",
     "socket.io": "^1.5.0",
     "util": "^0.10.3",
-    "winston": "^2.3.1"
+    "winston": "^2.3.1",
+    "i2c-bus": "^1.2.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.3",

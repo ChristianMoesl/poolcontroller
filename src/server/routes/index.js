@@ -9,6 +9,23 @@ const router = express.Router();
 const ioNamespace = '/index';
 const nsp = io.of(ioNamespace);
 
+const title = 'Pool Controller';
+
+const meta = {
+    author: 'Christian Mösl',
+    description: '',
+    keywords: '',
+};
+
+const stylesheets = [
+    { url: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' },
+];
+
+const javascripts = [
+    { url: 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js' },
+    { url: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js' },
+    { url: 'Client.min.js' },
+];
 
 nsp.on('connection', (socket) => {
     log.info(`Connected to namespace: ${ioNamespace}`);
@@ -26,9 +43,11 @@ router.get('/', (req, res, next) => {
     if (poolController.isInitialised()) {
         res.render('index', Object.assign(
             {
-                title: 'Pool Controller',
+                title,
+                meta,
+                stylesheets,
+                javascripts,
                 ioNamespace,
-                roofTemperatureSensorName: 'Roof temperature sensor',
             },
             poolController.getStatus(),
         ));
