@@ -1,12 +1,12 @@
 const client = require('mongodb').MongoClient;
 
-if (process.env.DB_HOST === undefined) {
-    throw Error('Please define the environment variable DB_HOST');
-}
-
-const connStr = `mongodb://${process.env.DB_HOST}/poolcontroller`;
+const connStr = process.env.DB_HOST === undefined ? null : `mongodb://${process.env.DB_HOST}/poolcontroller`;
 
 function DBConnection(callback) {
+    if (connStr == null) {
+        return;
+    }
+
     client.connect(connStr, null, (err, db) => {
         if (err !== null) {
             throw err;
