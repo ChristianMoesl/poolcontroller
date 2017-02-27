@@ -1,12 +1,8 @@
 const client = require('mongodb').MongoClient;
 
-const connStr = process.env.DB_HOST === undefined ? null : `mongodb://${process.env.DB_HOST}/poolcontroller`;
+const connStr = 'mongodb://localhost:27017/poolcontroller';
 
 function DBConnection(callback) {
-    if (connStr == null) {
-        return;
-    }
-
     client.connect(connStr, null, (err, db) => {
         if (err !== null) {
             throw err;

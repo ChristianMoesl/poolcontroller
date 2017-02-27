@@ -10,8 +10,8 @@
     "debug": "node %NODE_DEBUG_OPTION% ./Server.js",
     "dev": "npm run test && npm run build:server && npm run debug",
     "remote-debug": "node --debug=5858 ./Server.js",
-    "test": "./node_modules/.bin/mocha test --compilers js:babel-core/register --recursive",
-    "test:watch": "./node_modules/.bin/mocha test --compilers js:babel-core/register --recursive --watch",
+    "test": "mocha test --compilers js:babel-core/register --recursive",
+    "test:watch": "mocha test --compilers js:babel-core/register --recursive --watch",
     "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov mocha --recursive",
     "report-coverage": "cat ./coverage/lcov.info | coveralls"
   },
