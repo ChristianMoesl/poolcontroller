@@ -22,5 +22,6 @@ install:
   - export CXX="g++-4.8"
   - npm install
 
-after_script:
-  - npm run coveralls
+after_success:
+  - npm run coverage
+  - npm run report-coverage
