@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 
+import './Client.scss';
 import Layout from './pages/Layout';
 import Status from './pages/Status';
 import Settings from './pages/Settings';

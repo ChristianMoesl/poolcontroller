@@ -4,8 +4,8 @@ import Footer from '../components/Footer';
 import './Layout.scss';
 
 export default class Layout extends React.Component {
-    propTypes = {
-        children: React.PropTypes.element,
+    static propTypes = {
+        children: React.PropTypes.element.isRequired,
     };
 
     render() {
@@ -18,3 +18,5 @@ export default class Layout extends React.Component {
         );
     }
 }
+
+
