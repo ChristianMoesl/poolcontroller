@@ -1,3 +1,23 @@
 language: node_js
 node_js:
   - "6"
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
+    packages:
+      - xvfb
+
+env:
+  - CXX=g++-4.8
+
+cache:
+  directories:
+    - node_modules
+
+install:
+  - export CXX="g++-4.8"
+  - npm install
