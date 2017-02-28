@@ -1,29 +1,24 @@
 language: node_js
 node_js:
-  - "6"
-
+- '6'
 services: mongodb
-
 addons:
   apt:
     sources:
-      - ubuntu-toolchain-r-test
+    - ubuntu-toolchain-r-test
     packages:
-      - g++-4.8
-    packages:
-      - xvfb
-
+    - xvfb
 env:
-  - CXX=g++-4.8
-
+- CXX=g++-4.8
 cache:
   directories:
-    - node_modules
-
+  - node_modules
 install:
-  - export CXX="g++-4.8"
-  - npm install
-
+- export CXX="g++-4.8"
+- npm install
 after_success:
-  - npm run coverage
-  - npm run report-coverage
+- npm run coverage
+- npm run report-coverage
+notifications:
+  slack:
+    secure: lBWJyrX40O4hHjgEBx7qtibIFxtcNns1pPuPxLuPIUU3N5GMBhAcL7nEfhilyT1tX7hwjkfvI5SKLfECNtuVLEXJ6434elx5R9hKWa/oCyHLKilUkEUTassDifVw/Drwl6QqHbm5S0CGPlLwirUAoR+WZ8K1nM0nc0aJCNjKmtbsWXPPes5auO4C1n0mKY306sa/jPQM56/hHvntDZAzsXKxYjWiMgLFAipNUnj8cUzhnz9OkwLSehvjVt9UGw5hYrRsWuHKO/FA3usfSfMqb4KBRuTJKdKolZwTGHSbRF9TzS15h1Ma1zSPGAk/PxsNzpkMdzlegTPKXnAgH30cE95Ya95uPzVwCJFwKbv6sr53vW4lKjui8xCClnOHxfxibZ4R/3OFWp3lJKuA7ORUmQ/IkNyLXv6cBNBwISdva7G8StYHJ4IsDsa3xt00sKyY/nF19bZT38jpDR3RjmtTgTLCJFDbKu206aSQ4OEY/wRrvVIJ5XEocCubOEktxR5G71aMvhj5JvJGsh9ZoGjrD6MR0zTA9YGwV8+cMLaVsKhAlYR6wEqu8P9RR8Qas+AvfwQ2ZqAt7Ow0LlXHNa/6ERWh+8aTajo+Zcud0/kmuVNuMHZiTEG/i9m8qQbvU1f4uoRktNdbJgs2lTKyIYoKNkJTP/0q834GFrNHoumOFI0=
