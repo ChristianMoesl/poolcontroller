@@ -6,9 +6,9 @@
   "scripts": {
     "build": "npm run lint && npm run flow && npm run build:server && npm run build:client",
     "build:server": "./node_modules/.bin/webpack --config ./webpack.server.config.js",
-    "build:client": "webpack --config ./webpack.client.config.js",
+    "build:client": "./node_modules/.bin/webpack --config ./webpack.client.config.js",
     "start": "node ./Server.bundle.js",
-    "debug": "node %NODE_DEBUG_OPTION% ./Server.js",
+    "debug": "node --nolazy --debug-brk=5858 Server.bundle.js",
     "dev": "npm run test && npm run build:server && npm run debug",
     "remote-debug": "node --debug=5858 ./Server.js",
     "flow": "./node_modules/.bin/flow check",
@@ -19,7 +19,6 @@
     "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov mocha --recursive",
     "report-coverage": "cat ./coverage/lcov.info | coveralls"
   },
-  "main": "webpack.config.js",
   "dependencies": {
     "babel-preset-power-assert": "^1.0.0",
     "bluebird": "^3.4.6",
