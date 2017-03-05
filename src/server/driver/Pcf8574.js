@@ -1,6 +1,16 @@
 /* eslint-disable */
-const I2c = process.env.NODE_ENV === 'development' ?
-    require('./I2cSimulator') : require('i2c');
+let I2c: object;
+try {
+    I2c = require('i2c-bus');
+} catch (error) {
+    if (error.code !== 'MODULE_NOT_FOUND') {
+        throw error;
+    }
+    I2c = require('./I2cSimulator');
+}
+
+// const I2c = process.env.NODE_ENV === 'development' ?
+//     require('./I2cSimulator') : require('i2c');
 /* eslint-enable */
 
 export default class Pcf8574 {

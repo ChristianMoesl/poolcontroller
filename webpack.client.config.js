@@ -27,7 +27,7 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, 'public'),
-        filename: 'Client.min.js',
+        filename: 'Client.bundle.js',
     },
     plugins: debug ? [
         new webpack.NoEmitOnErrorsPlugin(),

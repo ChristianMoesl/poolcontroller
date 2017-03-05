@@ -3,10 +3,6 @@ const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
 
-if (debug) {
-    fs.createReadStream('webpack.client.config.js').pipe(fs.createWriteStream('./src/server/webpack.config.js'));
-}
-
 const nodeModules = {};
 fs.readdirSync('node_modules')
     .filter(x => ['.bin'].indexOf(x) === -1)
@@ -17,6 +13,7 @@ fs.readdirSync('node_modules')
 module.exports = {
     context: path.join(__dirname, '/src/server'),
     entry: './Server.js',
+ //   entry: './Test.js',
     target: 'node',
     devtool: 'sourcemap',
     externals: nodeModules,
@@ -27,15 +24,15 @@ module.exports = {
                 exclude: /node_modules/,
                 loader: 'babel-loader',
                 query: {
-                    presets: ['latest-minimal'],
-                    plugins: ['transform-strict-mode'],
+                    presets: ['latest-minimal', 'babel-preset-power-assert'],
+                    plugins: ['transform-strict-mode', 'transform-flow-strip-types'],
                 },
             },
         ],
     },
     output: {
         path: path.join(__dirname),
-        filename: 'Server.js',
+        filename: 'Server.bundle.js',
     },
     node: {
         __dirname: false,

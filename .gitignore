@@ -2,5 +2,6 @@
 /node_modules
 Server.bundle.js
 Server.bundle.js.map
-/src/server/webpack.config.js
+Client.bundle.js
+Client.bundle.js.map
 *.log
