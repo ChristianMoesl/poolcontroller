@@ -2,20 +2,10 @@ language: node_js
 node_js:
 - '6'
 services: mongodb
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - xvfb
-env:
-- CXX=g++-4.8
+compiler: gcc
 cache:
   directories:
   - node_modules
-install:
-- export CXX="g++-4.8"
-- npm install
 after_success:
 - npm run coverage
 - npm run report-coverage
