@@ -8,7 +8,7 @@
             "jsx": true
         }
     },
-    "evn": {
+    "env": {
         "browser": true,
         "node": true,
         "mocha": true
@@ -20,7 +20,7 @@
         "no-new": ["off"],
         "no-unused-vars": ["off"],
         "no-mixed-operators": ["off"],
-        "class-method-use-this": ["off"],
+        "class-methods-use-this": ["off"],
         "react/jsx-indent": ["warn", 4],
         "react/jsx-filename-extension": ["off", ".js"],
         "react/prefer-stateless-function": "off",
