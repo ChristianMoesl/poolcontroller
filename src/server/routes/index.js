@@ -24,7 +24,7 @@ const stylesheets = [
 const javascripts = [
     { url: 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js' },
     { url: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js' },
-    { url: 'Client.min.js' },
+    { url: 'Client.bundle.js' },
 ];
 
 nsp.on('connection', (socket) => {

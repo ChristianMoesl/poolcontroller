@@ -1,4 +1,6 @@
-import { EventEmitter } from 'events';
+/* @flow */
+
+import Events from 'events';
 import TemperatureSensor from './hardware/TemperatureSensor';
 import WaterLevelSensor from './hardware/WaterLevelSensor';
 import Pump from './hardware/Pump';
@@ -13,7 +15,13 @@ const outputAddress = 32;
 const intputAddresses = [56, 57];
 const analogAddress = 104;
 
-class PoolController extends EventEmitter {
+class PoolController extends Events.EventEmitter {
+    
+    _state: object;
+    _roofTempSensor: TemperatureSensor;
+    _waterLevelSensor: WaterLevelSensor;
+    _pump: Pump;
+    
     constructor() {
         super();
 
