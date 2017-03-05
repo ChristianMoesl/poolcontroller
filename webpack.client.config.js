@@ -19,7 +19,7 @@ module.exports = {
                 exclude: /node_modules/,
                 loader: 'babel-loader',
                 query: {
-                    presets: debug ? ['react', 'latest', 'react-hmre'] : ['react', 'latest'],
+                    presets: debug ? ['react', 'latest', 'react-hmre', 'flow'] : ['react', 'latest', 'flow'],
                     plugins: ['react-html-attrs', 'transform-decorators-legacy', 'transform-class-properties', 'transform-strict-mode'],
                 },
             },
