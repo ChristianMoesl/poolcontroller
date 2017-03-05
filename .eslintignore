@@ -1,5 +1,5 @@
 /node_modules
-Server.js
-/src/server/webpack.config.js
+*.bundle.js
 *.scss
 *.ejs
+*.log
