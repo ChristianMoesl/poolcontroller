@@ -2,7 +2,9 @@ language: node_js
 
 node_js:
  - '6'
-services: mongodb
+ 
+services: 
+ - mongodb
 
 env:
  - CXX=g++-4.8
