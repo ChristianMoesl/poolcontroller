@@ -2,13 +2,13 @@
     "env": {
         "test": {
             "plugins": [
-                "istanbul",
-                "transform-flow-strip-types"
+                "istanbul"
             ]
         }
     },
     "presets": [
         "react",
-        "latest"
+        "latest",
+        "flow"
     ]
 }

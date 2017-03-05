@@ -24,8 +24,8 @@ module.exports = {
                 exclude: /node_modules/,
                 loader: 'babel-loader',
                 query: {
-                    presets: ['latest-minimal', 'babel-preset-power-assert'],
-                    plugins: ['transform-strict-mode', 'transform-flow-strip-types'],
+                    presets: ['latest-minimal', 'babel-preset-power-assert', 'flow'],
+                    plugins: ['transform-strict-mode'],
                 },
             },
         ],
