@@ -1,7 +1,9 @@
 const debug = process.env.NODE_ENV === 'development';
 const path = require('path');
 const fs = require('fs');
+/* eslint-disable */
 const webpack = require('webpack');
+/* eslint-enable */
 
 const nodeModules = {};
 fs.readdirSync('node_modules')
@@ -13,16 +15,15 @@ fs.readdirSync('node_modules')
 module.exports = {
     context: path.join(__dirname, '/src/server'),
     entry: './Server.js',
- //   entry: './Test.js',
     target: 'node',
-    devtool: 'sourcemap',
+    devtool: 'inline-sourcemap',
     externals: nodeModules,
     module: {
         loaders: [
             {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
-                loader: 'babel-loader',
+                loader: 'babel-loader?retainLines=true',
                 query: {
                     presets: ['latest-minimal', 'babel-preset-power-assert', 'flow'],
                     plugins: ['transform-strict-mode'],
