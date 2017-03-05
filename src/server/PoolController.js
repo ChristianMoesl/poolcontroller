@@ -16,12 +16,11 @@ const intputAddresses = [56, 57];
 const analogAddress = 104;
 
 class PoolController extends Events.EventEmitter {
-    
     _state: any;
     _roofTempSensor: TemperatureSensor;
     _waterLevelSensor: WaterLevelSensor;
     _pump: Pump;
-    
+
     constructor() {
         super();
 
@@ -38,7 +37,7 @@ class PoolController extends Events.EventEmitter {
             this._updateStatus();
         });
     }
- 
+
     isInitialised() {
         return this._state !== State.uninitialised;
     }
