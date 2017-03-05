@@ -1,18 +1,28 @@
+os:
+  - linux
+  - osx
+  
 language: node_js
+
 node_js:
-- '6'
+ - '6'
 services: mongodb
+
 env:
-- CXX=g++-4.8
+ - CXX=g++-4.8
+
 cache:
   directories:
   - node_modules
+  
 install:
-- export CXX="g++-4.8"
-- npm install
+ - export CXX="g++-4.8"
+ - npm install
+ 
 after_success:
-- npm run coverage
-- npm run report-coverage
+ - npm run coverage
+ - npm run report-coverage
+ 
 notifications:
   slack:
     on_success: change # default: always
