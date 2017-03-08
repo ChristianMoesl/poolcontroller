@@ -46,8 +46,8 @@ class PoolController extends Events.EventEmitter {
         const status = {
             actors: [
                 {
-                    name: this._pump.getName(),
-                    value: this._pump.getState(),
+                    name: this._pump.name,
+                    value: this._pump.powerState,
                 },
             ],
             sensors: [

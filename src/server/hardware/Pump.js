@@ -1,40 +1,52 @@
-import { EventEmitter } from 'events';
+/* @flow */
 
-const util = require('util');
+import events from 'events';
+import assert from 'assert';
 
-function Pump(name) {
-    EventEmitter.call(this);
+export default class Pump extends events.EventEmitter {
+    _name: string;
+    _time: number;
+    _intervall: number;
+    _state: string;
 
-    const self = this;
-    const off = 'off';
-    const on = 'on';
-    let state = off;
-    let time = 0;
+    constructor(name: string) {
+        super();
+        assert(name || typeof name === 'string');
 
-    setInterval(tick, 1000);
-
-    this.turnOn = () => setState(on);
-    this.turnOff = () => setState(off);
-    this.getState = () => state;
-    this.getName = () => name;
-    this.getTime = () => time;
-
-    function change() {
-        self.emit('change', { name, value: state, time });
+        this._name = name;
+        this._time = 0;
+        this._state = 'off';
     }
 
-    function setState(newState) {
-        state = newState;
-        change();
+    turnOn() {
+        assert(this._state === 'off');
+
+        this._setState('on');
+        this._intervall = setInterval(() => this._tick(), 1000);
     }
 
-    function tick() {
-        if (state === on) {
-            time += 1;
-            change();
-        }
+    turnOff() {
+        assert(this._state === 'on');
+
+        this._setState('off');
+        clearInterval(this._intervall);
+    }
+
+    get powerState(): string { return this._state; }
+    get name(): string { return this._name; }
+    get operatingTime(): number { return this._time; }
+
+    _setState(state: string) {
+        this._state = state;
+        this._change();
+    }
+
+    _change() {
+        this.emit('change', { name: this._name, value: this._state, time: this._time });
+    }
+
+    _tick() {
+        this._time += 1;
+        this._change();
     }
 }
-util.inherits(Pump, EventEmitter);
-
-module.exports = Pump;
