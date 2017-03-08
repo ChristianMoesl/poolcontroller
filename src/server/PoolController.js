@@ -52,12 +52,12 @@ class PoolController extends Events.EventEmitter {
             ],
             sensors: [
                 {
-                    name: this._roofTempSensor.getName(),
-                    value: `${this._roofTempSensor.getTemperature().toFixed(1)}°`,
+                    name: this._roofTempSensor.name,
+                    value: `${this._roofTempSensor.temperature.toFixed(1)}°`,
                 },
                 {
-                    name: this._roofTempSensor.getName(),
-                    value: `${this._roofTempSensor.getTemperature().toFixed(1)}°`,
+                    name: this._roofTempSensor.name,
+                    value: `${this._roofTempSensor.temperature.toFixed(1)}°`,
                 },
                 {
                     name: this._waterLevelSensor.getName(),
