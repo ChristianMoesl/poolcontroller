@@ -9,7 +9,7 @@ export default class TemperatureSensor extends events.EventEmitter {
 
     constructor(name: string) {
         super();
-        assert(name || typeof name === 'string');
+        assert(name && typeof name === 'string');
 
         this._name = name;
         this._temperature = 25;
