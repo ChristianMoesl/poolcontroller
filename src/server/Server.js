@@ -169,7 +169,7 @@ try {
     server.on('listening', onListening);
 
     io.attach(server);
-    
+
 /**
  * Catch every exception and log it.
  */
