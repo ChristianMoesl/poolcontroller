@@ -37,11 +37,11 @@ try {
     /*
     *  Configure singla page application development server
     */
-    try {
+    if (process.env.NODE_ENV === 'development') {
         /* eslint-disable global-require, import/no-dynamic-require, import/no-extraneous-dependencies */
         // Step 1: Create & configure a webpack compiler
         const webpack = require('webpack');
-        const webpackConfig = require(`${process.cwd()}/webpack.client.config`);
+        const webpackConfig = require('./webpack.client.config');
         const compiler = webpack(webpackConfig);
 
         // Step 2: Attach the dev middleware to the compiler & the server
@@ -56,7 +56,7 @@ try {
         /* eslint-enable global-require, import/no-dynamic-require, import/no-extraneous-dependencies */
 
         log.info('Hot module reloading enabled');
-    } catch (e) {
+    } else {
         log.info('Hot module reloading disabled');
     }
 
@@ -91,28 +91,6 @@ try {
         });
     }
 
-    /**
-     * Get port from environment and store in Express.
-     */
-
-    const port = normalizePort(process.env.PORT || '80');
-    app.set('port', port);
-
-    /**
-     * Create HTTP server.
-     */
-
-    const server = createServer(app);
-
-    /**
-     * Listen on provided port, on all network interfaces.
-     */
-
-    server.listen(port);
-    server.on('error', onError);
-    server.on('listening', onListening);
-
-    io.attach(server);
 
     /**
      * Normalize a port into a number, string, or false.
@@ -134,9 +112,15 @@ try {
     };
 
     /**
+     * Get port from environment and store in Express.
+     */
+    const port = normalizePort(process.env.PORT || '80');
+    app.set('port', port);
+
+
+    /**
      * Event listener for HTTP server "error" event.
      */
-
     const onError = (error) => {
         if (error.syscall !== 'listen') {
             throw error;
@@ -164,7 +148,6 @@ try {
     /**
      * Event listener for HTTP server "listening" event.
      */
-
     const onListening = () => {
         const addr = server.address();
         const bind = typeof addr === 'string'
@@ -172,6 +155,21 @@ try {
             : `port ${addr.port}`;
         log.info(`Listening on ${bind}`);
     };
+
+    /**
+     * Create HTTP server.
+     */
+    const server = createServer(app);
+
+    /**
+     * Listen on provided port, on all network interfaces.
+     */
+    server.listen(port);
+    server.on('error', onError);
+    server.on('listening', onListening);
+
+    io.attach(server);
+    
 /**
  * Catch every exception and log it.
  */
@@ -180,6 +178,7 @@ try {
     if (typeof e.message === 'string') {
         e.message.split('\n').forEach((line) => { log.fatal(line); });
     }
+    log.fatal(e.stack);
     log.fatal('Terminating application!');
     process.exit(1);
 }
