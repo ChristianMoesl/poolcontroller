@@ -38,6 +38,6 @@ module.exports = {
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.HotModuleReplacementPlugin(),
     ] : [
-        new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
+//        new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
     ],
 };

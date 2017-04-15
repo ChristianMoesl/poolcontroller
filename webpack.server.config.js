@@ -10,7 +10,7 @@ fs.readdirSync('node_modules')
     });
 
 module.exports = function config(env) {
-    const isDevelopment = env.development;
+    const isDevelopment = env && env.development;
 
     if (isDevelopment) {
         fs.writeFileSync('./src/server/webpack.client.config.js', fs.readFileSync('./webpack.client.config.js'));

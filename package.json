@@ -12,8 +12,7 @@
     "debug": "node --nolazy --debug=5858 Server.bundle.js",
     "dev": "npm run build:dev && npm run debug",
     "remote-debug": "node --debug=5858 ./Server.js",
-    "test": "npm run lint && npm run flow && npm run tests:execute",
-    "tests:execute": "mocha test --compilers js:babel-core/register --recursive",
+    "test": "mocha test --compilers ts:ts-node/register --recursive",
     "tests:watch": "mocha test --compilers js:babel-core/register --recursive --watch",
     "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov mocha --recursive",
     "report-coverage": "cat ./coverage/lcov.info | coveralls"
@@ -68,6 +67,9 @@
     "i2c-bus": "^1.2.1"
   },
   "devDependencies": {
+    "@types/chai": "^3.5.0",
+    "@types/mocha": "^2.2.40",
+    "@types/sinon": "^2.1.2",
     "angular2-template-loader": "^0.6.2",
     "autoprefixer": "^6.7.3",
     "awesome-typescript-loader": "^3.1.2",
@@ -87,6 +89,7 @@
     "sinon": "^1.17.7",
     "source-map-loader": "^0.2.1",
     "style-loader": "^0.13.1",
+    "ts-node": "^3.0.2",
     "typescript": "^2.2.2",
     "webpack": "^2.2.1",
     "webpack-dev-middleware": "^1.10.0",
