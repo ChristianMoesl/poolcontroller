@@ -17,12 +17,13 @@ const meta = {
 };
 
 const stylesheets = [
-    { url: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' },
+    { url: 'https://fonts.googleapis.com/icon?family=Material+Icons' },
 ];
 
 const javascripts = [
-    { url: 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js' },
-    { url: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js' },
+    { url: 'https://unpkg.com/core-js/client/shim.min.js' },
+    { url: 'https://unpkg.com/zone.js@0.8.4?main=browser'},
+    { url: 'https://unpkg.com/systemjs@0.19.39/dist/system.src.js'},
     { url: 'Client.bundle.js' },
 ];
 

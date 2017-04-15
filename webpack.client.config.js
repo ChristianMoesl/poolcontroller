@@ -1,26 +1,32 @@
-const debug = process.env.NODE_ENV === 'development';
+const isDevelopment = process.env.NODE_ENV === 'development';
 const path = require('path');
-/* eslint-disable */
 const webpack = require('webpack');
-/* eslint-enable */
 
 module.exports = {
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.jsx']
+        extensions: ['.ts', '.js', '.scss', '.css', '.html']
     },
     context: path.join(__dirname, './src/client'),
-    devtool: debug ? 'inline-sourcemap' : false,
-    entry: debug ? ['webpack-hot-middleware/client', './Client.tsx'] : './Client.tsx',
+    devtool: isDevelopment ? 'inline-sourcemap' : false,
+    entry: isDevelopment ? ['webpack-hot-middleware/client', './main.ts'] : './main.ts',
     module: {
         loaders: [
+            {
+                test: /\.html$/,
+                loaders: ['html-loader'],
+            },
+            {
+                test: /\.css$/,
+                loaders: ['style-loader', 'css-loader?importLoaders=1', 'postcss-loader'],
+            },
             {
                 test: /\.scss$/,
                 loaders: ['style-loader', 'css-loader?importLoaders=1', 'postcss-loader', 'sass-loader'],
             },
             {
-                test: /\.tsx?$/,
+                test: /\.ts$/,
                 exclude: /node_modules/,
-                loaders: debug ? ['react-hot', 'awesome-typescript-loader'] : ['awesome-typescript-loader'],
+                loaders: ['awesome-typescript-loader', 'angular2-template-loader'],
             },
         ],
     },
@@ -28,7 +34,7 @@ module.exports = {
         path: path.join(__dirname, 'public'),
         filename: 'Client.bundle.js',
     },
-    plugins: debug ? [
+    plugins: isDevelopment ? [
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.HotModuleReplacementPlugin(),
     ] : [

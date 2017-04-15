@@ -1,9 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-/* eslint-disable */
 const webpack = require('webpack');
-/* eslint-enable */
-const isDevelopment = true;// env && env.development;
 
 const nodeModules = {};
 fs.readdirSync('node_modules')
@@ -13,6 +10,8 @@ fs.readdirSync('node_modules')
     });
 
 module.exports = function config(env) {
+    const isDevelopment = env.development;
+
     if (isDevelopment) {
         fs.writeFileSync('./src/server/webpack.client.config.js', fs.readFileSync('./webpack.client.config.js'));
     }

@@ -32,7 +32,6 @@ try {
     /*
     *  Configure singla page application development server
     */
-    /*
     if (process.env.NODE_ENV === 'development') {
         // Step 1: Create & configure a webpack compiler
         const webpack = require('webpack');
@@ -53,7 +52,6 @@ try {
     } else {
         log.info('Hot module reloading disabled');
     }
-    */
 
     // catch 404 and forward to error handler
     app.use((req: any, res: any, next: any) => {

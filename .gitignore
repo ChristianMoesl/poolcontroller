@@ -1,5 +1,6 @@
 /.idea/workspace.xml
 /node_modules
+/database
 /data
 /src/server/webpack.client.config.js
 Server.bundle.js
