@@ -1,8 +1,7 @@
 import poolController from '../PoolController';
-
-const express = require('express');
-const io = require('../util/sockets');
-const log = require('../util/Log');
+import * as express from 'express';
+import { io } from '../util/sockets';
+import { log } from '../util/Log';
 
 const router = express.Router();
 
@@ -43,11 +42,11 @@ router.get('/', (req, res, next) => {
     if (poolController.isInitialised()) {
         res.render('index', Object.assign(
             {
-                title,
-                meta,
-                stylesheets,
-                javascripts,
-                ioNamespace,
+                title: title,
+                meta: meta,
+                stylesheets: stylesheets,
+                javascripts: javascripts,
+                ioNamespace: ioNamespace,
             },
             poolController.getStatus(),
         ));
@@ -56,4 +55,4 @@ router.get('/', (req, res, next) => {
     }
 });
 
-module.exports = router;
+export { router as routes };

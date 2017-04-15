@@ -1,7 +1,5 @@
-/* @flow */
-
-import io from '../util/sockets';
-import log from '../util/Log';
+import { io } from '../util/sockets';
+import { log } from '../util/Log';
 
 export default class Room {
     _nsp: any;

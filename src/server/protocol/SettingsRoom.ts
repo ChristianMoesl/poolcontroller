@@ -1,6 +1,6 @@
 import Room from './Room';
 import { notImplemented, unknownParameter, missingParameter } from './Errors';
-import settings from '../services/Settings';
+import { settings } from '../services/Settings';
 
 export default class SettingsRoom extends Room {
     constructor() {
@@ -10,7 +10,7 @@ export default class SettingsRoom extends Room {
     get(data: any) {
         super.get(data);
 
-        if (data === null) {
+     /*   if (data === null) {
             this.sendNak(unknownParameter);
         } else {
             const serialized = {};
@@ -21,16 +21,16 @@ export default class SettingsRoom extends Room {
             });
 
             this.sendAck(serialized);
-        }
+        }*/
     }
 
     post(data: any) {
         super.post(data);
 
-        if (data === null) {
+     /*   if (data === null) {
             this.sendNak(missingParameter);
         } else {
             this.sendNak(notImplemented);
-        }
+        }*/
     }
 }

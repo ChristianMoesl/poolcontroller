@@ -1,10 +1,8 @@
-/* @flow */
-
-import events from 'events';
-import TemperatureSensor from './hardware/TemperatureSensor';
-import WaterLevelSensor from './hardware/WaterLevelSensor';
-import Pump from './hardware/Pump';
-import settings from './services/Settings';
+import { EventEmitter } from 'events';
+import { TemperatureSensor } from './hardware/TemperatureSensor';
+import { WaterLevelSensor } from './hardware/WaterLevelSensor';
+import { Pump } from './hardware/Pump';
+import { settings } from './services/Settings';
 
 const State = Object.freeze({
     uninitialised: {},
@@ -15,7 +13,7 @@ const outputAddress = 32;
 const intputAddresses = [56, 57];
 const analogAddress = 104;
 
-class PoolController extends events.EventEmitter {
+class PoolController extends EventEmitter {
     _state: any;
     _roofTempSensor: TemperatureSensor;
     _waterLevelSensor: WaterLevelSensor;
@@ -68,11 +66,11 @@ class PoolController extends events.EventEmitter {
             state: this._state,
         };
 
-        Object.keys(settings).forEach((key) => {
+      /*  Object.keys(settings).forEach((key) => {
             if (key.startsWith('get')) {
                 status.settings.push({ name: key.slice(3), value: settings[key]() });
             }
-        });
+        });*/
 
         return status;
     }

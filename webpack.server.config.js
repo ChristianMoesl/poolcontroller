@@ -3,6 +3,7 @@ const fs = require('fs');
 /* eslint-disable */
 const webpack = require('webpack');
 /* eslint-enable */
+const isDevelopment = true;// env && env.development;
 
 const nodeModules = {};
 fs.readdirSync('node_modules')
@@ -12,26 +13,25 @@ fs.readdirSync('node_modules')
     });
 
 module.exports = function config(env) {
-    if (env.development) {
+    if (isDevelopment) {
         fs.writeFileSync('./src/server/webpack.client.config.js', fs.readFileSync('./webpack.client.config.js'));
     }
 
     return {
+        resolve: {
+            extensions: ['.ts', '.tsx', '.js', '.jsx']
+        },
         context: path.join(__dirname, '/src/server'),
-        entry: './Server.js',
+        entry: './Server.ts',
         target: 'node',
         devtool: 'inline-sourcemap',
         externals: nodeModules,
         module: {
             loaders: [
                 {
-                    test: /\.jsx?$/,
+                    test: /\.tsx?$/,
                     exclude: /node_modules/,
-                    loader: 'babel-loader?retainLines=true',
-                    query: {
-                        presets: ['latest-minimal', 'babel-preset-power-assert', 'flow'],
-                        plugins: ['transform-strict-mode'],
-                    },
+                    loader: 'awesome-typescript-loader',
                 },
             ],
         },
@@ -43,7 +43,7 @@ module.exports = function config(env) {
             __dirname: false,
             __filename: false,
         },
-        plugins: env.development ? [
+        plugins: isDevelopment ? [
             new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development') }),
             new webpack.NoEmitOnErrorsPlugin(),
         ] : [

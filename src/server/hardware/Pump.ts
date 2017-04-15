@@ -1,12 +1,10 @@
-/* @flow */
+import { EventEmitter } from 'events';
+import * as assert from 'assert';
 
-import events from 'events';
-import assert from 'assert';
-
-export default class Pump extends events.EventEmitter {
+export class Pump extends EventEmitter {
     _name: string;
     _time: number;
-    _intervall: number;
+    _intervall: any;
     _state: string;
 
     constructor(name: string) {

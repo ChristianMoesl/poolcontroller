@@ -1,7 +1,14 @@
-import React from 'react';
-import { Link } from 'react-router';
+import * as React from 'react';
+import * as ReactRouter from 'react-router';
 
-export default class Navigation extends React.Component {
+const rr: any = ReactRouter;
+
+interface Props { }
+interface State {
+    collapsed: boolean;
+ }
+
+export class Navigation extends React.Component<Props, State> {
     constructor() {
         super();
         this.state = {
@@ -22,7 +29,7 @@ export default class Navigation extends React.Component {
             <nav className="navbar navbar-inverse navbar-fixed-top" role="navigation">
                 <div className="container">
                     <div className="navbar-header">
-                        <button type="button" className="navbar-toggle" onClick={() => this.toggleCollapse}>
+                        <button type="button" className="navbar-toggle" onClick={() => this.toggleCollapse()}>
                             <span className="sr-only">Toggle navigation</span>
                             <span className="icon-bar" />
                             <span className="icon-bar" />
@@ -32,10 +39,10 @@ export default class Navigation extends React.Component {
                     <div className={`navbar-collapse ${navClass}`} id="bs-example-navbar-collapse-1">
                         <ul className="nav navbar-nav">
                             <li>
-                                <Link to="status" onClick={() => this.toggleCollapse}>Status</Link>
+                                <rr.Link to="status" onClick={() => this.toggleCollapse()}>Status</rr.Link>
                             </li>
                             <li>
-                                <Link to="settings" onClick={() => this.toggleCollapse}>Settings</Link>
+                                <rr.Link to="settings" onClick={() => this.toggleCollapse()}>Settings</rr.Link>
                             </li>
                         </ul>
                     </div>

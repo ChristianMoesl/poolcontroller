@@ -1,5 +1,7 @@
-const io = require('socket.io')();
-const log = require('./Log');
+import { log } from './Log';
+import * as ion from 'socket.io';
+
+const io = ion();
 
 const connections = [];
 
@@ -13,4 +15,4 @@ io.on('connection', (socket) => {
     });
 });
 
-module.exports = io;
+export { io };

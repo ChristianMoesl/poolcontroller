@@ -1,29 +1,24 @@
-debugger;   // eslint-disable-line no-debugger
-
-const log = require('./util/Log');
-const assert = require('assert');
+import { log } from './util/Log';
+import * as assert from 'assert';
+import * as express from 'express';
+import * as path from 'path';
+import * as morgan from 'morgan';
+import * as cookieParser from 'cookie-parser';
+import * as bodyParser from 'body-parser';
+import { routes } from './routes/index';
+import { createServer } from 'http';
+import { io } from './util/sockets';
+import * as favicon from 'serve-favicon';
+import './PoolController';
+const app = express();
 
 try {
-    /* eslint-disable global-require */
-    require('./PoolController');
-    const express = require('express');
-    const path = require('path');
-    const morgan = require('morgan');
-    const cookieParser = require('cookie-parser');
-    const bodyParser = require('body-parser');
-    const routes = require('./routes/index');
-    const createServer = require('http').createServer;
-    const io = require('./util/sockets');
-    const favicon = require('serve-favicon');
-    const app = express();
-    /* eslint-enable global-require */
-
     // view engine setup
     app.set('views', path.join(__dirname, 'src/server/views'));
     app.set('view engine', 'ejs');
 
     const logStream = {
-        write: (msg, encoding) => log.info(msg.trim()),
+        write: (msg: string) => log.info(msg.trim()),
     };
 
     app.use(favicon(path.join(__dirname, '/public/images/favicon.ico')));
@@ -32,13 +27,13 @@ try {
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(cookieParser());
     app.use(express.static(path.join(__dirname, 'public')));
-    app.use('/', routes);
+    app.use("/", routes);
 
     /*
     *  Configure singla page application development server
     */
+    /*
     if (process.env.NODE_ENV === 'development') {
-        /* eslint-disable global-require, import/no-dynamic-require, import/no-extraneous-dependencies */
         // Step 1: Create & configure a webpack compiler
         const webpack = require('webpack');
         const webpackConfig = require('./webpack.client.config');
@@ -53,26 +48,26 @@ try {
         app.use(require('webpack-hot-middleware')(compiler, {
             log: log.info, path: '/__webpack_hmr', heartbeat: 10 * 1000,
         }));
-        /* eslint-enable global-require, import/no-dynamic-require, import/no-extraneous-dependencies */
 
         log.info('Hot module reloading enabled');
     } else {
         log.info('Hot module reloading disabled');
     }
+    */
 
     // catch 404 and forward to error handler
-    app.use((req, res, next) => {
+    app.use((req: any, res: any, next: any) => {
         const err = new Error('Not Found');
-        err.status = 404;
+  //      err.status = 404;
         next(err);
     });
 
     // error handlers
 
     // development error handler
-    // will print stacktrace
+    // will print stacktrace 
     if (app.get('env') === 'development') {
-        app.use((err, req, res) => {
+        app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
             res.status(err.status || 500);
             res.render('error', {
                 message: err.message,
@@ -82,7 +77,7 @@ try {
     } else {
     // production error handler
     // no stacktraces leaked to user
-        app.use((err, req, res) => {
+        app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
             res.status(err.status || 500);
             res.render('error', {
                 message: err.message,
@@ -116,7 +111,6 @@ try {
      */
     const port = normalizePort(process.env.PORT || '80');
     app.set('port', port);
-
 
     /**
      * Event listener for HTTP server "error" event.

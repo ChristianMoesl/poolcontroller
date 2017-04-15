@@ -1,9 +1,7 @@
-/* @flow */
+import { EventEmitter } from 'events';
+import * as assert from 'assert';
 
-import events from 'events';
-import assert from 'assert';
-
-export default class TemperatureSensor extends events.EventEmitter {
+export class TemperatureSensor extends EventEmitter {
     _name: string;
     _temperature: number;
 

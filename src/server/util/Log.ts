@@ -8,7 +8,7 @@ winston.addColors({
     fatal: 'red',
 });
 
-const logger = new (winston.Logger)({
+const log: any = new (winston.Logger)({
     transports: [
         new (winston.transports.Console)({
             timestamp: () => dateFormat(Date.now(), 'mm.dd.yyyy HH:MM:ss'),
@@ -26,4 +26,4 @@ const logger = new (winston.Logger)({
     },
 });
 
-module.exports = logger;
+export { log };

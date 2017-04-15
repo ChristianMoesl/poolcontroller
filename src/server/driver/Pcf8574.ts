@@ -1,5 +1,5 @@
-/* eslint-disable */
-let I2c: object;
+
+/*let I2c: object;
 try {
     I2c = require('i2c-bus');
 } catch (error) {
@@ -11,14 +11,17 @@ try {
 
 // const I2c = process.env.NODE_ENV === 'development' ?
 //     require('./I2cSimulator') : require('i2c');
-/* eslint-enable */
+
 
 export default class Pcf8574 {
-    constructor(i2cDevice, baseAddress) {
-        this._device = new I2c(baseAddress, { device: i2cDevice });
-        this._address = baseAddress;
+    private device: object;
+    private address: number;
 
-        this._device.readByte((err) => {
+    constructor(i2cDevice: any, baseAddress: number) {
+        this.device = new I2c(baseAddress, { device: i2cDevice });
+        this.address = baseAddress;
+
+        this.device.readByte((err) => {
             if (err) {
                 throw new Error();
             }
@@ -26,7 +29,7 @@ export default class Pcf8574 {
     }
 
     read(callback) {
-        this._device.readByte((err, result) => {
+        this.device.readByte((err, result) => {
             callback(err, err ? null : result[0]);
         });
     }
@@ -35,14 +38,14 @@ export default class Pcf8574 {
         if (typeof state !== 'number' || state > 0xFF || state < 0) {
             throw new Error('The parameter state has to be of type number with: 0 <= state <= 0xFF');
         }
-        this._device.writeByte(state, (err) => {
+        this.device.writeByte(state, (err) => {
             callback(err);
         });
     }
 }
 
 export class Pcf8574A {
-    constructor(baseAddress) {
-        this._address = baseAddress;
+    constructor(private baseAddress: number) {
     }
 }
+*/
