@@ -4,16 +4,17 @@ import { WaterLevelSensor } from './hardware/WaterLevelSensor';
 import { Pump } from './hardware/Pump';
 import { settings } from './services/Settings';
 
-const State = Object.freeze({
-    uninitialised: {},
-    idle: {},
-});
+enum State {
+    Uninitialised,
+    Idle,
+};
 
 const outputAddress = 32;
 const intputAddresses = [56, 57];
 const analogAddress = 104;
 
 class PoolController extends EventEmitter {
+    private state = State.Uninitialised;
     _state: any;
     _roofTempSensor: TemperatureSensor;
     _waterLevelSensor: WaterLevelSensor;
@@ -22,7 +23,6 @@ class PoolController extends EventEmitter {
     constructor() {
         super();
 
-        this._state = State.uninitialised;
         this._roofTempSensor = new TemperatureSensor('Roof temperature sensor');
         this._waterLevelSensor = new WaterLevelSensor('Water level sensor');
         this._pump = new Pump('Water pump');
@@ -31,13 +31,13 @@ class PoolController extends EventEmitter {
             this._roofTempSensor.on('change', this._onTemperatureChanged.bind(this));
             this._waterLevelSensor.on('change', this._onWaterLevelChanged.bind(this));
             this._pump.on('change', this._updateStatus.bind(this));
-            this._state = State.idle;
+            this.state = State.Idle;
             this._updateStatus();
         });
     }
 
     isInitialised() {
-        return this._state !== State.uninitialised;
+        return this.state !== State.Uninitialised;
     }
 
     getStatus() {
@@ -63,7 +63,7 @@ class PoolController extends EventEmitter {
                 },
             ],
             settings: [],
-            state: this._state,
+            state: this.state,
         };
 
       /*  Object.keys(settings).forEach((key) => {

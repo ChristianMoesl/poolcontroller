@@ -2,9 +2,8 @@
 /node_modules
 /database
 /data
+/public
 /src/server/webpack.client.config.js
 Server.bundle.js
-Server.bundle.js.map
 Client.bundle.js
-Client.bundle.js.map
 *.log

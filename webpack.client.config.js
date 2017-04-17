@@ -1,6 +1,11 @@
-const isDevelopment = process.env.NODE_ENV === 'development';
 const path = require('path');
 const webpack = require('webpack');
+const fs = require('fs-extra');
+
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+fs.copySync('./src/client/index.html', './public/index.html', { overwrite: true });
+fs.copySync('./src/client/images', './public/images', { overwrite: true });
 
 module.exports = {
     resolve: {

@@ -1,5 +1,5 @@
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const webpack = require('webpack');
 
 const nodeModules = {};
@@ -12,9 +12,8 @@ fs.readdirSync('node_modules')
 module.exports = function config(env) {
     const isDevelopment = env && env.development;
 
-    if (isDevelopment) {
-        fs.writeFileSync('./src/server/webpack.client.config.js', fs.readFileSync('./webpack.client.config.js'));
-    }
+    if (isDevelopment)
+        fs.copySync('./webpack.client.config.js', './src/server/webpack.client.config.js', { overwrite: true });
 
     return {
         resolve: {

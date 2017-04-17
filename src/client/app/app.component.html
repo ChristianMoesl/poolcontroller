@@ -3,12 +3,14 @@
         Jolly good!
     </md-sidenav>
 
-    <md-toolbar class="md-hue-2">
-        <button md-button class="md-icon-button" (click)="sidenav.open()">
+    <md-toolbar>
+        <button md-mini-fab class="pool-toolbar-button" (click)="sidenav.open()">
             <md-icon>menu</md-icon>
         </button>
-        <span>Title</span>
+        <span>{{title}}</span>
     </md-toolbar>
 
-    <div style="height: 3000px">content...</div>
+    <div style="height: 3000px">
+        <router-outlet></router-outlet>
+    </div>
 </md-sidenav-container>

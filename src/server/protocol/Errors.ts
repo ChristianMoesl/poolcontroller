@@ -1,5 +1,3 @@
-/* @flow */
-
 export class Error {
     _code: number;
     _msg: string;

@@ -5,7 +5,6 @@ import * as path from 'path';
 import * as morgan from 'morgan';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
-import { routes } from './routes/index';
 import { createServer } from 'http';
 import { io } from './util/sockets';
 import * as favicon from 'serve-favicon';
@@ -13,21 +12,15 @@ import './PoolController';
 const app = express();
 
 try {
-    // view engine setup
-    app.set('views', path.join(__dirname, 'src/server/views'));
-    app.set('view engine', 'ejs');
-
     const logStream = {
         write: (msg: string) => log.info(msg.trim()),
     };
 
-    app.use(favicon(path.join(__dirname, '/public/images/favicon.ico')));
     app.use(morgan('dev', { stream: logStream }));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(cookieParser());
-    app.use(express.static(path.join(__dirname, 'public')));
-    app.use("/", routes);
+    app.use('/images', express.static(path.join(__dirname, '/public/images')));
 
     /*
     *  Configure singla page application development server
@@ -53,37 +46,11 @@ try {
         log.info('Hot module reloading disabled');
     }
 
-    // catch 404 and forward to error handler
-    app.use((req: any, res: any, next: any) => {
-        const err = new Error('Not Found');
-  //      err.status = 404;
-        next(err);
+    app.use(favicon(path.join(__dirname, '/public/images/favicon.ico')));
+
+    app.use((req, res) => {
+        res.sendFile(path.join(__dirname, '/public/index.html'));
     });
-
-    // error handlers
-
-    // development error handler
-    // will print stacktrace 
-    if (app.get('env') === 'development') {
-        app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-            res.status(err.status || 500);
-            res.render('error', {
-                message: err.message,
-                error: err,
-            });
-        });
-    } else {
-    // production error handler
-    // no stacktraces leaked to user
-        app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-            res.status(err.status || 500);
-            res.render('error', {
-                message: err.message,
-                error: {},
-            });
-        });
-    }
-
 
     /**
      * Normalize a port into a number, string, or false.
