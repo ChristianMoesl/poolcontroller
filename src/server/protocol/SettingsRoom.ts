@@ -1,17 +1,17 @@
 import { inject, injectable } from 'inversify';
-import * as Services from '../Services';
-import { Logger } from '../services/Logger';
-import { SocketFactory } from '../services/Socket';
 import { Room } from './Room';
 import * as Error from '../../common/protocol/ProtocolError';
-import { settings } from '../services/Settings';
 import { Version } from '../services/Socket';
+import { Logger, LoggerType } from '../services/Logger';
+import { SocketFactory, SocketFactoryType } from '../services/Socket';
+import { PoolSettings, PoolSettingsType } from '../services/PoolSettings';
 
 @injectable()
 export class SettingsRoom extends Room {
     constructor(
-        @inject(Services.Logger) logger: Logger,
-        @inject(Services.SocketFactory) socketFactory: SocketFactory
+        @inject(LoggerType) logger: Logger,
+        @inject(SocketFactoryType) socketFactory: SocketFactory,
+        @inject(PoolSettingsType) private settings: PoolSettings
     ) {
         super(logger, socketFactory);
         this.initialize('settings');

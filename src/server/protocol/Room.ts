@@ -1,16 +1,15 @@
 import { injectable, inject } from 'inversify';
-import * as Services from '../Services';
-import { Logger } from '../services/Logger';
+import { Logger, LoggerType } from '../services/Logger';
 import { ProtocolError } from '../../common/protocol/ProtocolError';
-import { Socket, SocketFactory, Command, Version, Message } from '../services/Socket';
+import { Socket, SocketFactory, SocketFactoryType, Command, Version, Message } from '../services/Socket';
 
 @injectable()
 export class Room {
     private socket: Socket;
 
     protected constructor(
-        @inject(Services.Logger) private logger: Logger,
-        @inject(Services.SocketFactory) private socketFactory: SocketFactory
+        @inject(LoggerType) private logger: Logger,
+        @inject(SocketFactoryType) private socketFactory: SocketFactory
     ) { }
 
     protected initialize(roomName: string) {

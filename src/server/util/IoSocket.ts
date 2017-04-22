@@ -1,6 +1,5 @@
 import { inject, injectable } from 'inversify';
-import * as Services from '../Services';
-import { Logger } from '../services/Logger';
+import { Logger, LoggerType } from '../services/Logger';
 import { Socket, SocketFactory, Message } from '../services/Socket';
 import { EventDispatcher, Event } from '../util/Event';
 
@@ -55,7 +54,7 @@ export class IoSocket implements Socket {
 
 @injectable()
 export class IoSocketFactory implements SocketFactory {
-    constructor(@inject(Services.Logger) private logger: Logger) { }
+    constructor(@inject(LoggerType) private logger: Logger) { }
     create(name: string): Socket {
         return new IoSocket(name, this.logger);
     }

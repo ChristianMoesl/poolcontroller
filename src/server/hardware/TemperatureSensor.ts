@@ -1,28 +1,7 @@
-import { EventEmitter } from 'events';
-import * as assert from 'assert';
+import { Peripheral } from './Peripheral';
 
-export class TemperatureSensor extends EventEmitter {
-    _name: string;
-    _temperature: number;
-
-    constructor(name: string) {
-        super();
-        assert(name && typeof name === 'string');
-
-        this._name = name;
-        this._temperature = 25;
-    }
-
-    get name(): string { return this._name; }
-    get temperature(): number { return this._temperature; }
-
-    _tick() {
-        this._temperature += Math.random() * 2 - 1;
-        if (this._temperature > 30) {
-            this._temperature = 30;
-        } else if (this._temperature < 20) {
-            this._temperature = 20;
-        }
-        this.emit('changed', { name: this._name, temperature: this._temperature });
-    }
+export interface TemperatureSensor extends Peripheral<number> {
+    name: string;
+    temperature: number;
 }
+export const TemperatureSensorType = Symbol('TemperatureSensor');

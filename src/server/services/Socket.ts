@@ -23,7 +23,9 @@ export interface Socket {
     received: Event<Socket, Message>;
     send(data: Message);
 }
+export const SocketType = Symbol('Socket');
 
 export interface SocketFactory {
     create(name: string): Socket;
 }
+export const SocketFactoryType = Symbol('SocketFactory');

@@ -1,4 +1,4 @@
-import 'reflect-metadata';
+import { container } from './Config';
 import { log } from './util/Log';
 import * as assert from 'assert';
 import * as express from 'express';
@@ -9,12 +9,11 @@ import * as bodyParser from 'body-parser';
 import { createServer } from 'http';
 import { io } from './util/IoSocket';
 import * as favicon from 'serve-favicon';
-import { container } from './Config';
-import { PoolController } from './PoolController';
+import { PoolController } from './controller/PoolController';
 
 
 try {
-    const poolController = container.resolve<PoolController>(PoolController);
+    const poolController = container.get<PoolController>(PoolController);
     const app = express();
 
     const logStream = {
@@ -30,7 +29,7 @@ try {
     /*
     *  Configure singla page application development server
     */
-    if (process.env.NODE_ENV === 'development') {
+    /*if (process.env.NODE_ENV === 'development') {
         // Step 1: Create & configure a webpack compiler
         const webpack = require('webpack');
         const webpackConfig = require('./webpack.client.config');
@@ -49,7 +48,7 @@ try {
         log.info('Hot module reloading enabled');
     } else {
         log.info('Hot module reloading disabled');
-    }
+    } */
 
     app.use(favicon(path.join(__dirname, '/public/images/favicon.ico')));
 

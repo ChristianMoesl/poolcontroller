@@ -52,6 +52,7 @@
     "hammerjs": "^2.0.8",
     "history": "^1.17.0",
     "inversify": "^3.3.0",
+    "inversify-logger-middleware": "^3.0.0",
     "mongodb": "^2.2.22",
     "morgan": "~1.7.0",
     "redux": "^3.6.0",

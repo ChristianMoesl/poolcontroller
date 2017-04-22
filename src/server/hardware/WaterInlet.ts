@@ -1,9 +1,8 @@
-function WaterInlet() {
-    let isOn = true;
+import { Peripheral } from './Peripheral';
 
-    this.turnOn = () => { isOn = true; };
-    this.turnOff = () => { isOn = false; };
-    this.getState = () => isOn;
+export interface WaterInlet extends Peripheral<{}> {
+    turnOn();
+    turnOff();
+    getState(): boolean;
 }
-
-module.exports = WaterInlet;
+export const WaterInletType = Symbol('WaterInlet');

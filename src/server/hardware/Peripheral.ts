@@ -1,5 +1,7 @@
+import { injectable } from 'inversify';
 import { Event, EventDispatcher } from '../util/Event';
 
+@injectable()
 export class Peripheral<TState> {
     private _changedEvent = new EventDispatcher();
     private _name: string;
@@ -13,7 +15,7 @@ export class Peripheral<TState> {
     }
 
     get name(): string {
-        return this.name;
+        return this._name;
     }
 
     protected changedEvent(state: TState) {

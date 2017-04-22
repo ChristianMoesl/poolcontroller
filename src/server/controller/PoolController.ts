@@ -1,9 +1,9 @@
 import { injectable } from 'inversify';
-import { Protocol } from './protocol/Protocol';
-import { TemperatureSensor } from './hardware/TemperatureSensor';
-import { WaterLevelSensor } from './hardware/WaterLevelSensor';
-import { Pump } from './hardware/Pump';
-import { settings } from './services/Settings';
+import { Protocol } from '../protocol/Protocol';
+import { TemperatureSensor } from '../hardware/TemperatureSensor';
+import { WaterLevelSensor } from '../hardware/WaterLevelSensor';
+import { Pump } from '../hardware/Pump';
+import { PoolSettings } from '../services/PoolSettings';
 
 enum State {
     Uninitialised,
@@ -23,10 +23,12 @@ export class PoolController {
     _waterLevelSensor: WaterLevelSensor;
     _pump: Pump;
 
-    constructor(private protocol: Protocol) {
+    constructor(
+        private protocol: Protocol
+    ) {
    //     super();
 
-        this._roofTempSensor = new TemperatureSensor('Roof temperature sensor');
+    /*    this._roofTempSensor = new TemperatureSensor('Roof temperature sensor');
         this._waterLevelSensor = new WaterLevelSensor('Water level sensor');
         this._pump = new Pump('Water pump');
 
@@ -36,7 +38,7 @@ export class PoolController {
          //   this._pump.on('change', this._updateStatus.bind(this));
             this.state = State.Idle;
             this._updateStatus();
-        });
+        });*/
     }
 
     isInitialised() {
@@ -61,7 +63,7 @@ export class PoolController {
                     value: `${this._roofTempSensor.temperature.toFixed(1)}°`,
                 },
                 {
-                    name: this._waterLevelSensor.getName(),
+               //     name: this._waterLevelSensor.getName(),
                     value: `${this._waterLevelSensor.getWaterLevel().toFixed(1)}%`,
                 },
             ],
