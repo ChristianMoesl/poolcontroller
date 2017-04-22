@@ -1,6 +1,10 @@
 <md-sidenav-container>
-    <md-sidenav #sidenav class="example-sidenav">
-        Jolly good!
+    <md-sidenav #sidenav>
+        <ul>
+            <li><a routerLink="/status" (click)="setTitle('Status')">Status</a></li>
+            <li><a routerLink="/settings"  (click)="setTitle('Settings')">Settings</a></li>
+            <li><a routerLink="/about"  (click)="setTitle('About')">About</a></li>
+        </ul>
     </md-sidenav>
 
     <md-toolbar>
