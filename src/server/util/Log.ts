@@ -1,16 +1,17 @@
-const winston = require('winston');
-const dateFormat = require('dateformat');
+import { addColors, Logger, transports } from 'winston';
+import * as dateFormat from 'dateformat';
 
-winston.addColors({
+addColors({
     info: 'blue',
     warn: 'yellow',
     error: 'red',
     fatal: 'red',
 });
 
-const log: any = new (winston.Logger)({
+const log: any = new Logger({
     transports: [
-        new (winston.transports.Console)({
+        
+        new (transports.Console)({
             timestamp: () => dateFormat(Date.now(), 'mm.dd.yyyy HH:MM:ss'),
             colorize: true,
             prettyPrint: true,
@@ -26,4 +27,4 @@ const log: any = new (winston.Logger)({
     },
 });
 
-export { log };
+export { log};

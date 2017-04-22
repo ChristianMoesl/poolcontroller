@@ -1,4 +1,5 @@
-import { EventEmitter } from 'events';
+import { injectable } from 'inversify';
+import { Protocol } from './protocol/Protocol';
 import { TemperatureSensor } from './hardware/TemperatureSensor';
 import { WaterLevelSensor } from './hardware/WaterLevelSensor';
 import { Pump } from './hardware/Pump';
@@ -13,15 +14,17 @@ const outputAddress = 32;
 const intputAddresses = [56, 57];
 const analogAddress = 104;
 
-class PoolController extends EventEmitter {
+@injectable()
+export class PoolController {
     private state = State.Uninitialised;
     _state: any;
+
     _roofTempSensor: TemperatureSensor;
     _waterLevelSensor: WaterLevelSensor;
     _pump: Pump;
 
-    constructor() {
-        super();
+    constructor(private protocol: Protocol) {
+   //     super();
 
         this._roofTempSensor = new TemperatureSensor('Roof temperature sensor');
         this._waterLevelSensor = new WaterLevelSensor('Water level sensor');
@@ -30,7 +33,7 @@ class PoolController extends EventEmitter {
         settings.on('initialised', () => {
             this._roofTempSensor.on('change', this._onTemperatureChanged.bind(this));
             this._waterLevelSensor.on('change', this._onWaterLevelChanged.bind(this));
-            this._pump.on('change', this._updateStatus.bind(this));
+         //   this._pump.on('change', this._updateStatus.bind(this));
             this.state = State.Idle;
             this._updateStatus();
         });
@@ -84,10 +87,7 @@ class PoolController extends EventEmitter {
     }
 
     _updateStatus() {
-        this.emit('change', this.getStatus());
+ //       this.emit('change', this.getStatus());
     }
 }
 
-const poolController = new PoolController();
-
-export default poolController;

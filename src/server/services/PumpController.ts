@@ -1,40 +1,42 @@
-import { Pump } from '../hardware/Pump';
+import { Pump, PowerState } from '../hardware/Pump';
 import { Settings } from './Settings';
+import { log } from '../util/Log'; 
 
-const State = Object.freeze({
-    idle: {},
-    active: {},
-});
+export class PumpController {
+    private settings: any;
+    private previousDay: number = this.getDay();
+    private isMidnightPassed: boolean = false;
 
-export default class PumpController {
-    _pump: Pump;
-    _state: any;
-    _settings: any;
-
-    constructor(pump: Pump, settings: Settings) {
-        this._pump = pump;
-        this._settings = settings;
-        this._state = State.idle;
-
-        setInterval(() => this._tick(), 1000);
+    constructor(private pump: Pump, settings: Settings) {
+        this.settings = settings;
+        setInterval(() => this.tick(), 1000);
     }
 
-    _tick() {
-        const untilMidnight = this._getSecondsUntilMidnight();
+    private tick(): void {
+        const day = this.getDay();
 
-        if (this._state === State.idle) {
-            if (this._settings.getPumpTime() >= untilMidnight) {
-                this._state = State.active;
-                this._pump.turnOn();
+        if (this.previousDay !== day) 
+            this.isMidnightPassed = true;
+
+        this.previousDay = day;
+
+        if (this.pump.powerState === PowerState.off) {
+            if (this.settings.getPumpTime() >= this.getSecondsUntilMidnight()) {
+                this.pump.turnOn();
             }
-        } else if (this._state === State.active) {
-
         } else {
-            throw Error('Unknown state');
+            if (this.isMidnightPassed) {
+                this.isMidnightPassed = false;
+                this.pump.turnOff();
+            }
         }
     }
 
-    _getSecondsUntilMidnight() {
+    private getDay(): number {
+        return new Date(Date.now()).getDay();
+    }
+
+    private getSecondsUntilMidnight(): number {
         const until = new Date(Date.now());
         until.setHours(23, 59, 59, 999);
         const tmp = until.getTime();

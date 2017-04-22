@@ -1,50 +1,53 @@
-import { EventEmitter } from 'events';
+import { PowerState } from './PowerState';
+import { Peripheral } from './Peripheral';
 import * as assert from 'assert';
 
-export class Pump extends EventEmitter {
-    _name: string;
-    _time: number;
-    _intervall: any;
-    _state: string;
+export { PowerState };
+
+export class PumpState {
+    constructor(
+        public state: PowerState,
+        public time: number
+    ) { }
+}
+
+export class Pump extends Peripheral<PumpState> {
+    private time = 0;
+    private intervall: any;
+    private state = PowerState.off;
 
     constructor(name: string) {
-        super();
-        assert(name && typeof name === 'string');
-
-        this._name = name;
-        this._time = 0;
-        this._state = 'off';
+        super(name);
     }
 
-    turnOn() {
-        assert(this._state === 'off');
+    public turnOn() {
+        assert(this.state === PowerState.off);
 
-        this._setState('on');
-        this._intervall = setInterval(() => this._tick(), 1000);
+        this.changeState(PowerState.on);
+        this.intervall = setInterval(() => this.tick(), 1000);
     }
 
-    turnOff() {
-        assert(this._state === 'on');
+    public turnOff() {
+        assert(this.state === PowerState.on);
 
-        this._setState('off');
-        clearInterval(this._intervall);
+        this.changeState(PowerState.off);
+        clearInterval(this.intervall);
     }
 
-    get powerState(): string { return this._state; }
-    get name(): string { return this._name; }
-    get operatingTime(): number { return this._time; }
+    get powerState(): PowerState { return this.state; }
+    get operatingTime(): number { return this.time; }
 
-    _setState(state: string) {
-        this._state = state;
-        this._change();
+    private changeState(state: PowerState) {
+        this.state = state;
+        this.onChanged();
     }
 
-    _change() {
-        this.emit('change', { name: this._name, value: this._state, time: this._time });
+    private onChanged() {
+        this.changedEvent(new PumpState(this.state, this.time));
     }
 
-    _tick() {
-        this._time += 1;
-        this._change();
+    private tick() {
+        this.time += 1;
+        this.onChanged();
     }
 }

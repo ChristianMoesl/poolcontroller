@@ -12,14 +12,14 @@ export class Settings extends EventEmitter {
     constructor() {
         super();
 
-        new DBConnection((db) => {
+        new DBConnection(db => {
             const col = db.collection('settings');
 
             const self = this;
             col.find({}).toArray((err, items) => {
                 assert.equal(null, err);
 
-                items.forEach((elem) => {
+                items.forEach(elem => {
                     self.settings[elem._id] = elem.setting;
                 });
 

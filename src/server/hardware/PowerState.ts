@@ -1,6 +1,4 @@
-const PowerState = Object.freeze({
-    on: {},
-    off: {},
-});
-
-module.exports = PowerState;
+export enum PowerState {
+    on,
+    off,
+}

@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { log } from './util/Log';
 import * as assert from 'assert';
 import * as express from 'express';
@@ -6,12 +7,16 @@ import * as morgan from 'morgan';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import { createServer } from 'http';
-import { io } from './util/sockets';
+import { io } from './util/IoSocket';
 import * as favicon from 'serve-favicon';
-import './PoolController';
-const app = express();
+import { container } from './Config';
+import { PoolController } from './PoolController';
+
 
 try {
+    const poolController = container.resolve<PoolController>(PoolController);
+    const app = express();
+
     const logStream = {
         write: (msg: string) => log.info(msg.trim()),
     };

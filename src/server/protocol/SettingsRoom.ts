@@ -1,14 +1,23 @@
-import Room from './Room';
-import { notImplemented, unknownParameter, missingParameter } from './Errors';
+import { inject, injectable } from 'inversify';
+import * as Services from '../Services';
+import { Logger } from '../services/Logger';
+import { SocketFactory } from '../services/Socket';
+import { Room } from './Room';
+import * as Error from '../../common/protocol/ProtocolError';
 import { settings } from '../services/Settings';
+import { Version } from '../services/Socket';
 
-export default class SettingsRoom extends Room {
-    constructor() {
-        super('settings');
+@injectable()
+export class SettingsRoom extends Room {
+    constructor(
+        @inject(Services.Logger) logger: Logger,
+        @inject(Services.SocketFactory) socketFactory: SocketFactory
+    ) {
+        super(logger, socketFactory);
+        this.initialize('settings');
     }
 
-    get(data: any) {
-        super.get(data);
+    public get(version: Version, data: Object) {
 
      /*   if (data === null) {
             this.sendNak(unknownParameter);
@@ -23,9 +32,7 @@ export default class SettingsRoom extends Room {
             this.sendAck(serialized);
         }*/
     }
-
-    post(data: any) {
-        super.post(data);
+    public post(version: Version, data: Object) {
 
      /*   if (data === null) {
             this.sendNak(missingParameter);
