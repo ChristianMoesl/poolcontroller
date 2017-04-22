@@ -16,8 +16,6 @@ import { Logger, LoggerType } from './services/Logger';
 import { log } from './util/Log';
 
 // hardware
-import { BoardFactory, BoardFactoryType } from './hardware/BoardFactory';
-import { RpiBoardFactory } from './RpiBoardFactory';
 import { TemperatureSensor, TemperatureSensorType } from './hardware/TemperatureSensor';
 import { RpiTemperatureSensor } from './raspberrypi/RpiTemperatureSensor';
 import { Pump, PumpType } from './hardware/Pump';
@@ -38,27 +36,31 @@ import { PoolSettings, PoolSettingsType } from './services/PoolSettings';
 const container = new Container();
 container.applyMiddleware(makeLoggerMiddleware());
 
+// controller
 container.bind<PoolController>(PoolController).toSelf();
 container.bind<PumpController>(PumpController).toSelf();
 container.bind<TemperatureController>(TemperatureController).toSelf();
 container.bind<string>(StringType).toConstantValue('Roof temperature Sensor').whenParentNamed(RoofTemperatureSensorTag);
 container.bind<string>(StringType).toConstantValue('Other temperature Sensor').whenParentNamed(OtherTemperatureSensorTag);
 
+// services
 container.bind<Logger>(LoggerType).toConstantValue(log);
 container.bind<SocketFactory>(SocketFactoryType).to(IoSocketFactory);
-container.bind<BoardFactory>(BoardFactoryType).to(RpiBoardFactory);
+container.bind<PoolSettings>(PoolSettingsType).to(DBBasedSettings).inSingletonScope();
 
+// hardware
 container.bind<Pump>(PumpType).to(RpiPump);
 container.bind<TemperatureSensor>(TemperatureSensorType).to(RpiTemperatureSensor);
+container.bind<string>(StringType).toConstantValue('Water pump').whenInjectedInto(RpiPump);
 
+// protocol
 container.bind<Protocol>(Protocol).toSelf();
 container.bind<SettingsRoom>(SettingsRoom).toSelf();
 
+// database
 container.bind<string>(StringType)
         .toConstantValue('mongodb://localhost:27017/poolcontroller')
         .whenTargetNamed(DBConnectionStringTag);
 container.bind<DBConnection>(DBConnection).toSelf();
-
-container.bind<PoolSettings>(PoolSettingsType).to(DBBasedSettings).inSingletonScope();
 
 export { container };

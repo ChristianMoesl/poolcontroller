@@ -1,13 +1,12 @@
 const tt = null;
 
 import { container } from '../../../src/server/Config';
-import * as Services from '../../../src/server/Services';
 import { expect } from 'chai';
 import { useFakeTimers, spy, SinonFakeTimers, stub } from 'sinon';
-import { RpiPump } from '../../../src/server/hardware/rpi/RpiPump';
+import { RpiPump } from '../../../src/server/raspberrypi/RpiPump';
+import { Pump, PumpType } from '../../../src/server/hardware/Pump';
 import { PumpController } from '../../../src/server/controller/PumpController';
-import { PoolSettings } from '../../../src/server/services/PoolSettings';
-import { BoardFactory } from '../../../src/server/hardware/BoardFactory';
+import { PoolSettings, PoolSettingsType } from '../../../src/server/services/PoolSettings';
 
 describe('server/service/PumpController', () => {
     const name = 'Hello World';
@@ -20,10 +19,10 @@ describe('server/service/PumpController', () => {
     before(() => {
         container.snapshot();
         clock = useFakeTimers(startDay.getTime());
-        settings = container.get<PoolSettings>(Services.PoolSettings);
+        settings = container.get<PoolSettings>(PoolSettingsType);
         stub(settings, 'getPumpTime').returns(6 * 60 * 60);
         pumpController = container.get<PumpController>(PumpController);
-        pump = container.get<BoardFactory>(Services.BoardFactory).getPump('WATER');
+        pump = container.get<Pump>(PumpType);
     });
 
     after(() => {

@@ -1,16 +1,19 @@
+import { injectable, inject } from 'inversify';
 import * as assert from 'assert';
 import { PowerState } from '../hardware/PowerState';
 import { Peripheral } from '../hardware/Peripheral';
 import { Pump, PumpState } from '../hardware/Pump';
+import { StringType } from '../Types';
 
 export { PowerState };
 
+@injectable()
 export class RpiPump extends Peripheral<PumpState> implements Pump {
     private time = 0;
     private intervall: any;
     private state = PowerState.off;
 
-    constructor(name: string) {
+    constructor(@inject(StringType) name: string) {
         super(name);
     }
 

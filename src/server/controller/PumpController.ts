@@ -1,20 +1,17 @@
 import { inject, injectable } from 'inversify';
-import { Pump, PowerState } from '../hardware/Pump';
-import { BoardFactory, BoardFactoryType } from '../hardware/BoardFactory';
+import { Pump, PumpType, PowerState } from '../hardware/Pump';
 import { PoolSettings, PoolSettingsType } from '../services/PoolSettings';
 import { Logger } from '../services/Logger';
 
 @injectable()
 export class PumpController {
-    private pump: Pump;
     private previousDay: number = this.getDay();
     private isMidnightPassed: boolean = false;
 
     public constructor(
-        @inject(BoardFactoryType) boardFactory: BoardFactory, 
+        @inject(PumpType) private pump: Pump, 
         @inject(PoolSettingsType) private settings: PoolSettings
     ) {
-        this.pump = boardFactory.getPump('WATER');
         setInterval(() => this.tick(), 1000);
     }
 
