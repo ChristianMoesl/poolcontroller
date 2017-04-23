@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { useFakeTimers, spy } from 'sinon';
 //import { Pump } from '../../../src/server/hardware/Pump';
 
-describe('server/hardware/Pump', () => {
+describe('server/device/Pump', () => {
     const name = 'Hello World';
     let pump: any = null;
     let clock: any = null;
