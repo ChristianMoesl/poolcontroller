@@ -24,11 +24,11 @@ export class WaterLevelController {
         this.levelSensor.changed().subscribe((s, e) => this.onLevelChanged(e));
     }
 
-    isPumpAllowedToBeTurnedOn(): boolean {
+    isAllowedToPump(): boolean {
         return this.levelSensor.getWaterLevel() >= WaterLevelController.lowerInletThreshold;
     }
 
-    isPumpNeededToBeTurnedOn(): boolean {
+    isRequiredToPump(): boolean {
         return this.state === State.pump;
     }
 

@@ -63,23 +63,23 @@ describe('server/controller/WaterLevelController', () => {
     it(`has to disable the pump when level < ${WaterLevelController.lowerInletThreshold}%`, () => {
         waterLevel = WaterLevelController.lowerInletThreshold;
         levelChanged.dispatch(level, waterLevel);
-        expect(controller.isPumpAllowedToBeTurnedOn()).to.be.true;
+        expect(controller.isAllowedToPump()).to.be.true;
 
         waterLevel = WaterLevelController.lowerInletThreshold - 0.1;
         levelChanged.dispatch(level, waterLevel);
-        expect(controller.isPumpAllowedToBeTurnedOn()).to.be.false;
+        expect(controller.isAllowedToPump()).to.be.false;
     });
 
     it(`has to force the pump to be turned on when level >= ${WaterLevelController.upperPumpThreshold}%`, () => {
-        expect(controller.isPumpNeededToBeTurnedOn()).to.be.false;
+        expect(controller.isRequiredToPump()).to.be.false;
 
         waterLevel = WaterLevelController.upperPumpThreshold - 0.1;
         levelChanged.dispatch(level, waterLevel);
-        expect(controller.isPumpNeededToBeTurnedOn()).to.be.false;
+        expect(controller.isRequiredToPump()).to.be.false;
 
         waterLevel = WaterLevelController.upperPumpThreshold;
         levelChanged.dispatch(level, waterLevel);
-        expect(controller.isPumpNeededToBeTurnedOn()).to.be.true;
+        expect(controller.isRequiredToPump()).to.be.true;
     });
 
     it (`has to disable the pump when level < ${WaterLevelController.lowerPumpThreshold}%`, () => {
@@ -88,10 +88,10 @@ describe('server/controller/WaterLevelController', () => {
 
         waterLevel = WaterLevelController.lowerPumpThreshold;
         levelChanged.dispatch(level, waterLevel);
-        expect(controller.isPumpNeededToBeTurnedOn()).to.be.true;
+        expect(controller.isRequiredToPump()).to.be.true;
 
         waterLevel = WaterLevelController.lowerPumpThreshold - 0.1;
         levelChanged.dispatch(level, waterLevel);
-        expect(controller.isPumpNeededToBeTurnedOn()).to.be.false;
+        expect(controller.isRequiredToPump()).to.be.false;
     });
 });

@@ -7,7 +7,7 @@ import { StringType } from '../../src/server/Types';
 import { PoolController } from '../../src/server/controller/PoolController';
 import { PumpController } from '../../src/server/controller/PumpController';
 import { TemperatureController, RoofTemperatureSensorTag, 
-        OtherTemperatureSensorTag } from '../../src/server/controller/TemperatureController';
+        PoolTemperatureSensorTag } from '../../src/server/controller/TemperatureController';
 import { WaterLevelController } from '../../src/server/controller/WaterLevelController';
 
 // services
@@ -23,6 +23,7 @@ import { DigitalWaterLevelSensor, LowerLevelSensorPinTag, LowerMidLevelSensorPin
     UpperLevelSensorPinTag,UpperMidLevelSensorPinTag} from '../../src/server/device/DigitalWaterLevelSensor';
 import { WaterLevelSensor, WaterLevelSensorType } from '../../src/server/device/WaterLevelSensor';
 import { WaterInlet, WaterInletPinTag } from '../../src/server/device/WaterInlet';
+import { ThreeWayValve, ValvePos1PinTag, ValvePos2PinTag } from '../../src/server/device/ThreeWayValve';
 
 // protocol
 import { Protocol } from '../../src/server/protocol/Protocol';
@@ -47,12 +48,12 @@ const container = new Container();
 /*
  *  ============= CONTROLLER =================
  */ 
-container.bind<PoolController>(PoolController).toSelf();
-container.bind<PumpController>(PumpController).toSelf();
-container.bind<TemperatureController>(TemperatureController).toSelf();
-container.bind<WaterLevelController>(WaterLevelController).toSelf();
+container.bind<PoolController>(PoolController).toSelf().inSingletonScope();
+container.bind<PumpController>(PumpController).toSelf().inSingletonScope();
+container.bind<TemperatureController>(TemperatureController).toSelf().inSingletonScope();
+container.bind<WaterLevelController>(WaterLevelController).toSelf().inSingletonScope();
 container.bind<string>(StringType).toConstantValue('Roof temperature Sensor').whenParentNamed(RoofTemperatureSensorTag);
-container.bind<string>(StringType).toConstantValue('Other temperature Sensor').whenParentNamed(OtherTemperatureSensorTag);
+container.bind<string>(StringType).toConstantValue('Pool temperature Sensor').whenParentNamed(PoolTemperatureSensorTag);
 
 /*
  *  ============= SERVICES =================
@@ -84,6 +85,12 @@ container.bind<string>(StringType).toConstantValue('Water level sensor').whenInj
 container.bind<WaterInlet>(WaterInlet).toSelf().inSingletonScope();
 container.bind<string>(StringType).toConstantValue('Water inlet').whenInjectedInto(WaterInlet);
 container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(WaterInletPinTag);
+
+// Three way valve
+container.bind<ThreeWayValve>(ThreeWayValve).toSelf().inSingletonScope();
+container.bind<string>(StringType).toConstantValue('Water valve').whenInjectedInto(ThreeWayValve);
+container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(ValvePos1PinTag);
+container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(ValvePos2PinTag);
 
 /*
  *  ============= PROTOCOL =================

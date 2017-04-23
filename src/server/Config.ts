@@ -7,7 +7,7 @@ import { StringType } from './Types';
 import { PoolController } from './controller/PoolController';
 import { PumpController } from './controller/PumpController';
 import { TemperatureController, RoofTemperatureSensorTag, 
-        OtherTemperatureSensorTag } from './controller/TemperatureController';
+        PoolTemperatureSensorTag } from './controller/TemperatureController';
 import { WaterLevelController } from './controller/WaterLevelController';
 
 // services
@@ -19,6 +19,7 @@ import { log } from './util/Log';
 // device
 import { TemperatureSensor } from './device/TemperatureSensor';
 import { Pump } from './device/Pump';
+import { ThreeWayValve } from './device/ThreeWayValve';
 
 // protocol
 import { Protocol } from './protocol/Protocol';
@@ -41,7 +42,7 @@ container.bind<PumpController>(PumpController).toSelf();
 container.bind<TemperatureController>(TemperatureController).toSelf();
 container.bind<WaterLevelController>(WaterLevelController).toSelf();
 container.bind<string>(StringType).toConstantValue('Roof temperature Sensor').whenParentNamed(RoofTemperatureSensorTag);
-container.bind<string>(StringType).toConstantValue('Other temperature Sensor').whenParentNamed(OtherTemperatureSensorTag);
+container.bind<string>(StringType).toConstantValue('Pool temperature Sensor').whenParentNamed(PoolTemperatureSensorTag);
 
 // services
 container.bind<Logger>(LoggerType).toConstantValue(log);
@@ -51,7 +52,9 @@ container.bind<PoolSettings>(PoolSettingsType).to(DBBasedSettings).inSingletonSc
 // device
 container.bind<Pump>(Pump).toSelf().inSingletonScope();
 container.bind<TemperatureSensor>(TemperatureSensor).toSelf();
+container.bind<ThreeWayValve>(ThreeWayValve).toSelf().inSingletonScope();
 container.bind<string>(StringType).toConstantValue('Water pump').whenInjectedInto(Pump);
+container.bind<string>(StringType).toConstantValue('Water valve').whenInjectedInto(ThreeWayValve);
 
 // protocol
 container.bind<Protocol>(Protocol).toSelf();

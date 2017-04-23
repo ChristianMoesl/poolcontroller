@@ -7,22 +7,17 @@ describe('server/device/Pump', () => {
     let pump: any = null;
     let clock: any = null;
 
-    before(() => {
+    beforeEach(() => {
         pump = null;// new Pump(name);
         clock = useFakeTimers();
     });
 
-    after(() => {
+    afterEach(() => {
         clock.restore();
     });
 
-    it('has to have a name', () => {
-   /*     expect(pump.name).to.be.a('string');
-        expect(pump.name).to.equal(name);*/
-    });
-
     it('is initial off', () => {
-   //     expect(pump.powerState).to.equal('off');
+    //    expect(pump.powerState).to.equal('off');
     });
 
     it('summes the operating time', () => {
