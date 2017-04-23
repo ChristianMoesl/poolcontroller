@@ -19,7 +19,7 @@ export class RpiPump extends Peripheral<PumpState> implements Pump {
 
     public turnOn() {
         assert(this.state === PowerState.off);
-        
+
         this.started = Date.now();
         this.changeState(PowerState.on);
     }
@@ -31,8 +31,8 @@ export class RpiPump extends Peripheral<PumpState> implements Pump {
         this.changeState(PowerState.off);
     }
 
-    get powerState(): PowerState { return this.state; }
-    get operatingTime(): number { return this.time; }
+    public getPowerState(): PowerState { return this.state; }
+    public getOperatingTime(): number { return this.time; }
 
     private changeState(state: PowerState) {
         this.state = state;

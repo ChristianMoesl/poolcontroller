@@ -13,7 +13,7 @@ export class RpiTemperatureSensor extends Peripheral<number> implements Temperat
         this._temperature = 25;
     }
 
-    get temperature(): number { return this._temperature; }
+    getTemperature(): number { return this._temperature; }
 
     tick() {
         this._temperature += Math.random() * 2 - 1;

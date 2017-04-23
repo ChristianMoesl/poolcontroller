@@ -10,7 +10,7 @@ import { PoolSettings, PoolSettingsType } from '../../../src/server/services/Poo
 
 describe('server/service/PumpController', () => {
     const name = 'Hello World';
-    let pump = null;
+    let pump: Pump = null;
     let settings: PoolSettings = null;
     let pumpController = null;
     let clock: SinonFakeTimers = null;
@@ -32,11 +32,11 @@ describe('server/service/PumpController', () => {
 
     it('has to pump at least 6 hours a day', () => {
         clock.tick(24 * 60 * 60 * 1000);
-        expect(pump.operatingTime).to.equal(6 * 60 * 60 * 1000);
+        expect(pump.getOperatingTime()).to.equal(6 * 60 * 60 * 1000);
     });
 
     it('has to stop pump on midnight', () => {
         clock.tick(36 * 60 * 60 * 1000);
-        expect(pump.operatingTime).to.equal(6 * 60 * 60 * 1000);
+        expect(pump.getOperatingTime()).to.equal(6 * 60 * 60 * 1000);
     });
 });

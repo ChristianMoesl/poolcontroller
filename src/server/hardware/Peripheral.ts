@@ -14,7 +14,7 @@ export class Peripheral<TState> {
         return this._changedEvent;
     }
 
-    get name(): string {
+    getName(): string {
         return this._name;
     }
 

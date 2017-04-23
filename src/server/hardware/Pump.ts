@@ -14,7 +14,7 @@ export class PumpState {
 export interface Pump extends Peripheral<PumpState> {
     turnOn();
     turnOff();
-    powerState: PowerState;
-    operatingTime: number;
+    getPowerState(): PowerState;
+    getOperatingTime(): number;
 }
 export const PumpType = Symbol('Pump');

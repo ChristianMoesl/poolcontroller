@@ -46,8 +46,8 @@ export class PoolController {
     }
 
     getStatus() {
-        const status = {
-            actors: [
+        const status = { };
+    /*        actors: [
                 {
                     name: this._pump.name,
                     value: this._pump.powerState,
@@ -69,7 +69,7 @@ export class PoolController {
             ],
             settings: [],
             state: this.state,
-        };
+        };*/
 
       /*  Object.keys(settings).forEach((key) => {
             if (key.startsWith('get')) {

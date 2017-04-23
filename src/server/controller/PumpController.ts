@@ -23,7 +23,7 @@ export class PumpController {
 
         this.previousDay = day;
 
-        if (this.pump.powerState === PowerState.off) {
+        if (this.pump.getPowerState() === PowerState.off) {
             if (this.settings.getPumpTime() >= this.getMinutesUntilMidnight()) {
                 this.pump.turnOn();
             }

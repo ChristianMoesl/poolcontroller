@@ -10,9 +10,4 @@ export class TemperatureController {
         @inject(TemperatureSensorType) @named(RoofTemperatureSensorTag) private roofTempSensor: TemperatureSensor,
         @inject(TemperatureSensorType) @named(OtherTemperatureSensorTag) private otherTempSensor: TemperatureSensor
     ) { }
-
-    run() {
-        console.log(`roof: ${this.roofTempSensor.name}`);
-        console.log(`other: ${this.otherTempSensor.name}`);
-    }
 }
