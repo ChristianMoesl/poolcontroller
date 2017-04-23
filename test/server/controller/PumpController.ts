@@ -30,10 +30,10 @@ describe('server/service/PumpController', () => {
     it('has to pump at least 6 hours a day', () => {
         clock.tick(24 * 60 * 60 * 1000);
         expect(pump.getOperatingTime()).to.equal(6 * 60 * 60 * 1000);
-    });
+    }).timeout(5000);
 
     it('has to stop pump on midnight', () => {
         clock.tick(36 * 60 * 60 * 1000);
         expect(pump.getOperatingTime()).to.equal(6 * 60 * 60 * 1000);
-    });
+    }).timeout(5000);
 });
