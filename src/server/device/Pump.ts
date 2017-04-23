@@ -54,6 +54,6 @@ export class Pump extends Peripheral<PumpState> {
     }
 
     private onChanged() {
-        this.changedEvent(new PumpState(this.state, this.time));
+        this.invokeChanged(new PumpState(this.state, this.time));
     }
 }

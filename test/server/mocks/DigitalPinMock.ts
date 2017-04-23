@@ -9,6 +9,15 @@ export class DigitalPinMock implements DigitalPin {
 
     changed(): Event<DigitalPin, DigitalPinState> { return this.changedEvent; }
     getState(): DigitalPinState  { return this.state }
-    setActive() { this.state = DigitalPinState.active }
-    setIdle() { this.state = DigitalPinState.idle }
+    isActive(): boolean { return this.state === DigitalPinState.active; }
+    isIdle(): boolean { return this.state === DigitalPinState.idle; }
+    setActive() { 
+        this.state = DigitalPinState.active;
+        this.changedEvent.dispatch(this, this.state);
+    }
+
+    setIdle() { 
+        this.state = DigitalPinState.idle;
+        this.changedEvent.dispatch(this, this.state);
+    }
 }

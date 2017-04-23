@@ -22,6 +22,6 @@ export class TemperatureSensor extends Peripheral<number> {
             this._temperature = 20;
         }
 
-        this.changedEvent(this._temperature);
+        this.invokeChanged(this._temperature);
     }
 }

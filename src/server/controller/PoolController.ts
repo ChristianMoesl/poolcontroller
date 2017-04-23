@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import { Protocol } from '../protocol/Protocol';
-import { TemperatureSensor } from '../device/TemperatureSensor';
-import { WaterLevelSensor } from '../device/WaterLevelSensor';
+import { TemperatureController } from './TemperatureController';
+import { WaterLevelController } from './WaterLevelController';
 import { Pump } from '../device/Pump';
 import { PoolSettings } from '../services/PoolSettings';
 
@@ -19,12 +19,10 @@ export class PoolController {
     private state = State.Uninitialised;
     _state: any;
 
-    _roofTempSensor: TemperatureSensor;
-    _waterLevelSensor: WaterLevelSensor;
-    _pump: Pump;
-
     constructor(
-        private protocol: Protocol
+        private protocol: Protocol,
+        private temperatureController: TemperatureController,
+        private waterLevelController: WaterLevelController
     ) {
    //     super();
 

@@ -8,6 +8,7 @@ import { PoolController } from './controller/PoolController';
 import { PumpController } from './controller/PumpController';
 import { TemperatureController, RoofTemperatureSensorTag, 
         OtherTemperatureSensorTag } from './controller/TemperatureController';
+import { WaterLevelController } from './controller/WaterLevelController';
 
 // services
 import { SocketFactory, SocketFactoryType } from './services/Socket';
@@ -38,6 +39,7 @@ const container = new Container();
 container.bind<PoolController>(PoolController).toSelf();
 container.bind<PumpController>(PumpController).toSelf();
 container.bind<TemperatureController>(TemperatureController).toSelf();
+container.bind<WaterLevelController>(WaterLevelController).toSelf();
 container.bind<string>(StringType).toConstantValue('Roof temperature Sensor').whenParentNamed(RoofTemperatureSensorTag);
 container.bind<string>(StringType).toConstantValue('Other temperature Sensor').whenParentNamed(OtherTemperatureSensorTag);
 

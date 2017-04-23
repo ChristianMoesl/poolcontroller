@@ -1,6 +1,6 @@
-import { Peripheral } from './Peripheral';
+import { Event } from '../util/Event';
 
-export interface WaterLevelSensor extends Peripheral<{}> {
+export interface WaterLevelSensor {
     getWaterLevel(): number;
 }
 export const WaterLevelSensorType = Symbol('WaterLevelSensor');

@@ -7,6 +7,8 @@ export enum DigitalPinState {
 
 export interface DigitalPin {
     changed(): Event<DigitalPin, DigitalPinState>;
+    isActive(): boolean;
+    isIdle(): boolean;
     getState(): DigitalPinState;
     setActive();
     setIdle();
