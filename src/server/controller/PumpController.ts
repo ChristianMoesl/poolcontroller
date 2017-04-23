@@ -12,7 +12,7 @@ export class PumpController {
         @inject(PumpType) private pump: Pump, 
         @inject(PoolSettingsType) private settings: PoolSettings
     ) {
-        setInterval(() => this.tick(), 1000);
+        setInterval(() => this.tick(), 1000 * 60);
     }
 
     private tick(): void {
@@ -24,7 +24,7 @@ export class PumpController {
         this.previousDay = day;
 
         if (this.pump.powerState === PowerState.off) {
-            if (this.settings.getPumpTime() >= this.getSecondsUntilMidnight()) {
+            if (this.settings.getPumpTime() >= this.getMinutesUntilMidnight()) {
                 this.pump.turnOn();
             }
         } else {
@@ -39,13 +39,13 @@ export class PumpController {
         return new Date(Date.now()).getDay();
     }
 
-    private getSecondsUntilMidnight(): number {
+    private getMinutesUntilMidnight(): number {
         const until = new Date(Date.now());
         until.setHours(23, 59, 59, 999);
         const tmp = until.getTime();
         const now = Date.now();
 
-        return now < tmp ? (tmp - now) / 1000 : 0;
+        return now < tmp ? (tmp - now) / 1000 / 60 : 0;
     }
 
 }

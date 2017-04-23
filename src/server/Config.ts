@@ -34,7 +34,7 @@ import { PoolSettings, PoolSettingsType } from './services/PoolSettings';
 
 
 const container = new Container();
-container.applyMiddleware(makeLoggerMiddleware());
+// container.applyMiddleware(makeLoggerMiddleware());
 
 // controller
 container.bind<PoolController>(PoolController).toSelf();
@@ -49,7 +49,7 @@ container.bind<SocketFactory>(SocketFactoryType).to(IoSocketFactory);
 container.bind<PoolSettings>(PoolSettingsType).to(DBBasedSettings).inSingletonScope();
 
 // hardware
-container.bind<Pump>(PumpType).to(RpiPump);
+container.bind<Pump>(PumpType).to(RpiPump).inSingletonScope();
 container.bind<TemperatureSensor>(TemperatureSensorType).to(RpiTemperatureSensor);
 container.bind<string>(StringType).toConstantValue('Water pump').whenInjectedInto(RpiPump);
 

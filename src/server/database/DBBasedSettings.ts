@@ -4,7 +4,7 @@ import { DBConnection } from './DBConnection';
 
 @injectable()
 export class DBBasedSettings implements PoolSettings {
-    private pumpTime: number = 1;
+    private pumpTime: number = 6 * 60;
 
     constructor(
          private db: DBConnection

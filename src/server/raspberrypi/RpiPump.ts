@@ -10,7 +10,7 @@ export { PowerState };
 @injectable()
 export class RpiPump extends Peripheral<PumpState> implements Pump {
     private time = 0;
-    private intervall: any;
+    private started: number;
     private state = PowerState.off;
 
     constructor(@inject(StringType) name: string) {
@@ -19,16 +19,16 @@ export class RpiPump extends Peripheral<PumpState> implements Pump {
 
     public turnOn() {
         assert(this.state === PowerState.off);
-
+        
+        this.started = Date.now();
         this.changeState(PowerState.on);
-        this.intervall = setInterval(() => this.tick(), 1000);
     }
 
     public turnOff() {
         assert(this.state === PowerState.on);
 
+        this.time += Date.now() - this.started;
         this.changeState(PowerState.off);
-        clearInterval(this.intervall);
     }
 
     get powerState(): PowerState { return this.state; }
@@ -41,10 +41,5 @@ export class RpiPump extends Peripheral<PumpState> implements Pump {
 
     private onChanged() {
         this.changedEvent(new PumpState(this.state, this.time));
-    }
-
-    private tick() {
-        this.time += 1;
-        this.onChanged();
     }
 }

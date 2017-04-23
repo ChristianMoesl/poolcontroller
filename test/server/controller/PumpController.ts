@@ -16,27 +16,27 @@ describe('server/service/PumpController', () => {
     let clock: SinonFakeTimers = null;
     const startDay = new Date(2017, 4, 14, 0, 0, 0, 0);
 
-    before(() => {
+    beforeEach(() => {
         container.snapshot();
         clock = useFakeTimers(startDay.getTime());
         settings = container.get<PoolSettings>(PoolSettingsType);
-        stub(settings, 'getPumpTime').returns(6 * 60 * 60);
+        stub(settings, 'getPumpTime').returns(6 * 60);
         pumpController = container.get<PumpController>(PumpController);
         pump = container.get<Pump>(PumpType);
     });
 
-    after(() => {
+    afterEach(() => {
         clock.restore();
         container.restore();
     });
 
     it('has to pump at least 6 hours a day', () => {
         clock.tick(24 * 60 * 60 * 1000);
-        expect(pump.operatingTime).to.equal(6 * 60 * 60);
+        expect(pump.operatingTime).to.equal(6 * 60 * 60 * 1000);
     });
 
     it('has to stop pump on midnight', () => {
         clock.tick(36 * 60 * 60 * 1000);
-        expect(pump.operatingTime).to.equal(6 * 60 * 60);
+        expect(pump.operatingTime).to.equal(6 * 60 * 60 * 1000);
     });
 });
