@@ -2,11 +2,20 @@ import { injectable, inject, named } from 'inversify';
 import { WaterInlet } from '../device/WaterInlet';
 import { WaterLevelSensor, WaterLevelSensorType } from '../device/WaterLevelSensor';
 
+enum State {
+    idle,
+    filling,
+    pump,
+}
+
 @injectable()
 export class WaterLevelController {
-    private isFillingUp = false;
-    private static lowerThreshold = 25;
-    private static upperThreshold = 50;
+    public static lowerInletThreshold = 10;
+    public static upperInletThreshold = 30;
+    public static lowerPumpThreshold = 70;
+    public static upperPumpThreshold = 90;
+
+    private state: State = State.idle;
 
     constructor(
         private inlet: WaterInlet,
@@ -15,17 +24,35 @@ export class WaterLevelController {
         this.levelSensor.changed().subscribe((s, e) => this.onLevelChanged(e));
     }
 
+    isPumpAllowedToBeTurnedOn(): boolean {
+        return this.levelSensor.getWaterLevel() >= WaterLevelController.lowerInletThreshold;
+    }
+
+    isPumpNeededToBeTurnedOn(): boolean {
+        return this.state === State.pump;
+    }
+
     private onLevelChanged(level: number) {
-        if (this.isFillingUp) {
-            if (level >= WaterLevelController.upperThreshold) {
-                this.isFillingUp = false;
+        switch (this.state) {
+            case State.idle:
+            if (level <= WaterLevelController.lowerInletThreshold) {
+                this.state = State.filling;
+                this.inlet.turnOn();
+            } else if (level >= WaterLevelController.upperPumpThreshold) {
+                this.state = State.pump;
+            }
+            break;
+            case State.filling:
+            if (level >= WaterLevelController.upperInletThreshold) {
+                this.state = State.idle;
                 this.inlet.turnOff();
             }
-        } else {
-            if (level <= WaterLevelController.lowerThreshold) {
-                this.isFillingUp = true;
-                this.inlet.turnOn();
+            break;
+            case State.pump:
+            if (level < WaterLevelController.lowerPumpThreshold) {
+                this.state = State.idle;
             }
+            break;
         }
     }
 }

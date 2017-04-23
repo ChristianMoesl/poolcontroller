@@ -2,6 +2,7 @@ import { inject, injectable } from 'inversify';
 import { Pump, PowerState } from '../device/Pump';
 import { PoolSettings, PoolSettingsType } from '../services/PoolSettings';
 import { Logger } from '../services/Logger';
+import { WaterLevelController } from './WaterLevelController';
 
 @injectable()
 export class PumpController {
@@ -10,7 +11,8 @@ export class PumpController {
 
     public constructor(
         private pump: Pump, 
-        @inject(PoolSettingsType) private settings: PoolSettings
+        @inject(PoolSettingsType) private settings: PoolSettings,
+        private waterLevelController: WaterLevelController
     ) {
         setInterval(() => this.tick(), 1000 * 60);
     }
@@ -23,13 +25,16 @@ export class PumpController {
 
         this.previousDay = day;
 
-        if (this.pump.getPowerState() === PowerState.off) {
+        if (this.pump.getPowerState() === PowerState.off
+            && this.waterLevelController.isPumpAllowedToBeTurnedOn()) {
             if (this.settings.getPumpTime() >= this.getMinutesUntilMidnight()) {
                 this.pump.turnOn();
             }
         } else {
             if (this.isMidnightPassed) {
                 this.isMidnightPassed = false;
+                this.pump.turnOff();
+            } else if (!this.waterLevelController.isPumpAllowedToBeTurnedOn()) {
                 this.pump.turnOff();
             }
         }

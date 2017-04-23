@@ -64,13 +64,13 @@ export class DigitalWaterLevelSensor extends Peripheral<number> implements Water
 
     private calculateLevel(): number {
         if (this.upper.isActive()) 
-            return 100;
+            return 90;
         else if (this.upperMid.isActive()) 
-            return 75;
+            return 70;
         else if (this.lowerMid.isActive()) 
-            return 50;
+            return 30;
         else if (this.lower.isActive())
-            return 25;
+            return 10;
         else 
             return 0;
     }

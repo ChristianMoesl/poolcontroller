@@ -38,25 +38,60 @@ describe('server/controller/WaterLevelController', () => {
         container.restore();
     });
 
-    it('has to get water when <= 25%', () => {
+    it(`has to get water when level <= ${WaterLevelController.lowerInletThreshold}%`, () => {
         levelChanged.dispatch(level, waterLevel);
         expect(isInletOn).to.be.false;
 
-        waterLevel = 25;
+        waterLevel = WaterLevelController.lowerInletThreshold;
         levelChanged.dispatch(level, waterLevel);
         expect(isInletOn).to.be.true;
     });
 
-    it('has to stop getting water when >= 50%', () => {
-        waterLevel = 25;
+    it(`has to stop getting water when level >= ${WaterLevelController.upperInletThreshold}%`, () => {
+        waterLevel = WaterLevelController.lowerInletThreshold;
         levelChanged.dispatch(level, waterLevel);
 
-        waterLevel = 49.9;
+        waterLevel = WaterLevelController.upperInletThreshold - 0.1;
         levelChanged.dispatch(level, waterLevel);
-        expect(isInletOn, 'Should stay on when < 50%').to.be.true;
+        expect(isInletOn).to.be.true;
 
-        waterLevel = 50;
+        waterLevel = WaterLevelController.upperInletThreshold;
         levelChanged.dispatch(level, waterLevel);
-        expect(isInletOn, 'Should stop on exactly 50%').to.be.false;
+        expect(isInletOn).to.be.false;
+    });
+
+    it(`has to disable the pump when level < ${WaterLevelController.lowerInletThreshold}%`, () => {
+        waterLevel = WaterLevelController.lowerInletThreshold;
+        levelChanged.dispatch(level, waterLevel);
+        expect(controller.isPumpAllowedToBeTurnedOn()).to.be.true;
+
+        waterLevel = WaterLevelController.lowerInletThreshold - 0.1;
+        levelChanged.dispatch(level, waterLevel);
+        expect(controller.isPumpAllowedToBeTurnedOn()).to.be.false;
+    });
+
+    it(`has to force the pump to be turned on when level >= ${WaterLevelController.upperPumpThreshold}%`, () => {
+        expect(controller.isPumpNeededToBeTurnedOn()).to.be.false;
+
+        waterLevel = WaterLevelController.upperPumpThreshold - 0.1;
+        levelChanged.dispatch(level, waterLevel);
+        expect(controller.isPumpNeededToBeTurnedOn()).to.be.false;
+
+        waterLevel = WaterLevelController.upperPumpThreshold;
+        levelChanged.dispatch(level, waterLevel);
+        expect(controller.isPumpNeededToBeTurnedOn()).to.be.true;
+    });
+
+    it (`has to disable the pump when level < ${WaterLevelController.lowerPumpThreshold}%`, () => {
+        waterLevel = WaterLevelController.upperPumpThreshold;
+        levelChanged.dispatch(level, waterLevel);
+
+        waterLevel = WaterLevelController.lowerPumpThreshold;
+        levelChanged.dispatch(level, waterLevel);
+        expect(controller.isPumpNeededToBeTurnedOn()).to.be.true;
+
+        waterLevel = WaterLevelController.lowerPumpThreshold - 0.1;
+        levelChanged.dispatch(level, waterLevel);
+        expect(controller.isPumpNeededToBeTurnedOn()).to.be.false;
     });
 });

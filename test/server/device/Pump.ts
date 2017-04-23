@@ -25,7 +25,7 @@ describe('server/device/Pump', () => {
    //     expect(pump.powerState).to.equal('off');
     });
 
-    it('sumes the operating time', () => {
+    it('summes the operating time', () => {
     /*    expect(pump.operatingTime).to.equal(0);
 
         pump.turnOn();

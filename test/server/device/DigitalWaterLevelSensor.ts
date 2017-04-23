@@ -62,16 +62,16 @@ describe('server/device/DigitalWaterLevelSensor', () => {
         upperMid.setActive();
         lowerMid.setActive();
         lower.setActive();
-        expect(levelSensor.getWaterLevel()).to.equal(100, 'Has to display 100%');
+        expect(levelSensor.getWaterLevel()).to.equal(90, 'Has to display 90%');
         
         upper.setIdle();
-        expect(levelSensor.getWaterLevel()).to.equal(75, 'Has to display 75%');
+        expect(levelSensor.getWaterLevel()).to.equal(70, 'Has to display 70%');
 
         upperMid.setIdle();
-        expect(levelSensor.getWaterLevel()).to.equal(50, 'Has to display 50%');
+        expect(levelSensor.getWaterLevel()).to.equal(30, 'Has to display 30%');
 
         lowerMid.setIdle();
-        expect(levelSensor.getWaterLevel()).to.equal(25, 'Has to display 25%');
+        expect(levelSensor.getWaterLevel()).to.equal(10, 'Has to display 10%');
 
         lower.setIdle();
         expect(levelSensor.getWaterLevel()).to.equal(0, 'Has to display 0%');
