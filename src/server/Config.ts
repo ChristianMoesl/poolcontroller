@@ -15,11 +15,9 @@ import { IoSocketFactory } from './util/IoSocket';
 import { Logger, LoggerType } from './services/Logger';
 import { log } from './util/Log';
 
-// hardware
-import { TemperatureSensor, TemperatureSensorType } from './hardware/TemperatureSensor';
-import { RpiTemperatureSensor } from './raspberrypi/RpiTemperatureSensor';
-import { Pump, PumpType } from './hardware/Pump';
-import { RpiPump } from './raspberrypi/RpiPump';
+// device
+import { TemperatureSensor } from './device/TemperatureSensor';
+import { Pump } from './device/Pump';
 
 // protocol
 import { Protocol } from './protocol/Protocol';
@@ -48,10 +46,10 @@ container.bind<Logger>(LoggerType).toConstantValue(log);
 container.bind<SocketFactory>(SocketFactoryType).to(IoSocketFactory);
 container.bind<PoolSettings>(PoolSettingsType).to(DBBasedSettings).inSingletonScope();
 
-// hardware
-container.bind<Pump>(PumpType).to(RpiPump).inSingletonScope();
-container.bind<TemperatureSensor>(TemperatureSensorType).to(RpiTemperatureSensor);
-container.bind<string>(StringType).toConstantValue('Water pump').whenInjectedInto(RpiPump);
+// device
+container.bind<Pump>(Pump).toSelf().inSingletonScope();
+container.bind<TemperatureSensor>(TemperatureSensor).toSelf();
+container.bind<string>(StringType).toConstantValue('Water pump').whenInjectedInto(Pump);
 
 // protocol
 container.bind<Protocol>(Protocol).toSelf();

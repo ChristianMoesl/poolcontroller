@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { Pump, PumpType, PowerState } from '../hardware/Pump';
+import { Pump, PowerState } from '../device/Pump';
 import { PoolSettings, PoolSettingsType } from '../services/PoolSettings';
 import { Logger } from '../services/Logger';
 
@@ -9,7 +9,7 @@ export class PumpController {
     private isMidnightPassed: boolean = false;
 
     public constructor(
-        @inject(PumpType) private pump: Pump, 
+        private pump: Pump, 
         @inject(PoolSettingsType) private settings: PoolSettings
     ) {
         setInterval(() => this.tick(), 1000 * 60);

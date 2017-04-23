@@ -1,5 +1,5 @@
-
-/*let I2c: object;
+/*
+let I2c: object;
 try {
     I2c = require('i2c-bus');
 } catch (error) {
@@ -46,6 +46,6 @@ export default class Pcf8574 {
 
 export class Pcf8574A {
     constructor(private baseAddress: number) {
-    }
+    } 
 }
 */

@@ -1,8 +1,8 @@
 import { injectable } from 'inversify';
 import { Protocol } from '../protocol/Protocol';
-import { TemperatureSensor } from '../hardware/TemperatureSensor';
-import { WaterLevelSensor } from '../hardware/WaterLevelSensor';
-import { Pump } from '../hardware/Pump';
+import { TemperatureSensor } from '../device/TemperatureSensor';
+import { WaterLevelSensor } from '../device/WaterLevelSensor';
+import { Pump } from '../device/Pump';
 import { PoolSettings } from '../services/PoolSettings';
 
 enum State {

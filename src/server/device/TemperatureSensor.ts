@@ -1,11 +1,10 @@
 import { inject, injectable } from 'inversify';
 import { StringType } from '../Types';
 import * as assert from 'assert';
-import { Peripheral } from '../hardware/Peripheral';
-import { TemperatureSensor } from '../hardware/TemperatureSensor';
+import { Peripheral } from './Peripheral';
 
 @injectable()
-export class RpiTemperatureSensor extends Peripheral<number> implements TemperatureSensor {
+export class TemperatureSensor extends Peripheral<number> {
     private _temperature: number;
 
     public constructor(@inject(StringType) name: string) {

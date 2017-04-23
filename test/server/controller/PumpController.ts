@@ -1,10 +1,7 @@
-const tt = null;
-
-import { container } from '../../../src/server/Config';
+import { container } from '../Config';
 import { expect } from 'chai';
 import { useFakeTimers, spy, SinonFakeTimers, stub } from 'sinon';
-import { RpiPump } from '../../../src/server/raspberrypi/RpiPump';
-import { Pump, PumpType } from '../../../src/server/hardware/Pump';
+import { Pump } from '../../../src/server/device/Pump';
 import { PumpController } from '../../../src/server/controller/PumpController';
 import { PoolSettings, PoolSettingsType } from '../../../src/server/services/PoolSettings';
 
@@ -22,7 +19,7 @@ describe('server/service/PumpController', () => {
         settings = container.get<PoolSettings>(PoolSettingsType);
         stub(settings, 'getPumpTime').returns(6 * 60);
         pumpController = container.get<PumpController>(PumpController);
-        pump = container.get<Pump>(PumpType);
+        pump = container.get<Pump>(Pump);
     });
 
     afterEach(() => {
