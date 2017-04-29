@@ -16,15 +16,19 @@ describe('server/controller/WaterLevelController', () => {
     let inlet: WaterInlet = null;
     let level: DigitalWaterLevelSensor = null;
     let controller: WaterLevelController = null;
+    let settings: PoolSettings = null;
     let waterLevel = 50;
     let isInletOn = false;
     let levelChanged = new EventDispatcher<WaterLevelSensor, number>();
+    let clock: SinonFakeTimers = null;
 
     beforeEach(() => {
         container.snapshot();
+        clock = useFakeTimers();
         
         level = container.get<WaterLevelSensor>(WaterLevelSensorType) as DigitalWaterLevelSensor;
         inlet = container.get<WaterInlet>(WaterInlet);
+        settings = container.get<PoolSettings>(PoolSettingsType);
 
         stub(level, 'getWaterLevel').callsFake(() => waterLevel);
         stub(level, 'changed').callsFake(() => levelChanged);
@@ -35,6 +39,7 @@ describe('server/controller/WaterLevelController', () => {
     });
 
     afterEach(() => {
+        clock.restore();
         container.restore();
     });
 
@@ -82,15 +87,22 @@ describe('server/controller/WaterLevelController', () => {
         expect(controller.isRequiredToPump()).to.be.true;
     });
 
-    it (`has to disable the pump when level < ${WaterLevelController.lowerPumpThreshold}%`, () => {
+    it('has to enable the pump exactly the set pump time', () => {
         waterLevel = WaterLevelController.upperPumpThreshold;
         levelChanged.dispatch(level, waterLevel);
 
-        waterLevel = WaterLevelController.lowerPumpThreshold;
-        levelChanged.dispatch(level, waterLevel);
-        expect(controller.isRequiredToPump()).to.be.true;
+        settings.setPumpIntervall(5);
 
-        waterLevel = WaterLevelController.lowerPumpThreshold - 0.1;
+        clock.tick(6 * 60 * 1000);
+
+        expect(controller.isRequiredToPump()).to.be.false;
+    });
+
+    it (`after reaching top it has to disable the pump when reaching < ${WaterLevelController.lowerInletThreshold}%`, () => {
+        waterLevel = WaterLevelController.upperPumpThreshold;
+        levelChanged.dispatch(level, waterLevel);
+
+        waterLevel = WaterLevelController.lowerInletThreshold - 0.1;
         levelChanged.dispatch(level, waterLevel);
         expect(controller.isRequiredToPump()).to.be.false;
     });

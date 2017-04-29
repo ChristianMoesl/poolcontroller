@@ -1,10 +1,14 @@
 import { inject, injectable, named } from 'inversify';
 import { Logger, LoggerType } from '../services/Logger';
 import { StringType } from '../Types';
-import Tags from '../Tags';
-import { MongoClient as client } from 'mongodb';
+import { MongoClient, Db } from 'mongodb';
+export { MongoClient, Db } from 'mongodb';
 
 export const DBConnectionStringTag = Symbol('DBConnectionString');
+
+interface Callback {
+    (db: Db): void;
+}
 
 @injectable()
 export class DBConnection {
@@ -13,8 +17,8 @@ export class DBConnection {
         @inject(LoggerType) private logger: Logger
     ) { }
 
-    executeQuey(callback: any) {
-        client.connect(this.connString, null, (err, db) => {
+    connect(): Promise<Db> {
+        return MongoClient.connect(this.connString).catch(err => {
             if (err !== null) {
                 if (err.name === 'MongoError') {
                     this.logger.error(`Failed to connect to database [${this.connString}] on first connect`);
@@ -23,8 +27,6 @@ export class DBConnection {
                 }
                 throw err;
             }
-
-            callback(db);
         });
     }
 }
