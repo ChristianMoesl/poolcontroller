@@ -55,19 +55,19 @@ describe('server/service/PumpController', () => {
     it('has to pump at least 6 hours a day', () => {
         clock.tick(day);
         expect(pump.getOperatingTime()).to.equal(6 * hour);
-    }).timeout(5000);
+    });
 
     it('has to stop pump on midnight', () => {
         clock.tick(day + 12 * hour);
         expect(pump.getOperatingTime()).to.equal(6 * hour);
-    }).timeout(5000);
+    });
 
     it('has to stop pump when not allowed', () => {
         clock.tick(22 * hour);
         isAllowed = false;
         clock.tick(2 * hour);
         expect(pump.getOperatingTime()).to.be.within(4 * hour - (2 * minute), 4 * hour + (2 * minute));
-    }).timeout(5000);
+    });
 
     it('isn\'t allowed to pump when the level is to high', () => {
         isAllowed = false;
