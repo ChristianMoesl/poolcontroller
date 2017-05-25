@@ -1,19 +1,21 @@
-import { container } from '../Config';
+import { createContainer, Container } from '../Config';
 import { expect } from 'chai';
 import { PoolSettings, PoolSettingsType } from '../../../src/server/services/PoolSettings';
 import { DBBasedSettings } from '../../../src/server/database/DBBasedSettings';
+import { OperationMode } from '../../../src/server/system/OperationMode';
 
 describe('server/database/DBBasedSettings', () => {
+    let container: Container;
     let settings: DBBasedSettings;
 
     beforeEach(() => {
-        container.snapshot();
+        container = createContainer();
         
         settings = container.resolve<DBBasedSettings>(DBBasedSettings);
     });
 
     afterEach(() => {
-        container.restore();
+        container = null;
     });
 
     it('has to have valid default settings', () => {
@@ -21,6 +23,7 @@ describe('server/database/DBBasedSettings', () => {
         expect(settings.getPumpTime()).to.be.a('number').and.not.equal(0);
         expect(settings.getTargetTemperature()).to.be.a('number').and.not.equal(0);
         expect(settings.getTemperatureThreshold()).to.be.a('number').and.not.equal(0);
+        expect(settings.getOperationMode()).to.equal(OperationMode.automatic);
     });
 
     it('has to store settings', () => {
@@ -35,5 +38,8 @@ describe('server/database/DBBasedSettings', () => {
 
         settings.setTemperatureThreshold(10);
         expect(settings.getTemperatureThreshold()).to.equal(10);
+
+        settings.setOperationMode(OperationMode.manual);
+        expect(settings.getOperationMode()).to.equal(OperationMode.manual);
     });
 });

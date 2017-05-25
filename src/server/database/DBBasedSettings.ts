@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
-import { PoolSettings } from '../services/PoolSettings';
+import { PoolSettings, PoolSettingChangedHandler } from '../services/PoolSettings';
 import { DBConnection, Db } from './DBConnection';
+import { OperationMode } from '../system/OperationMode';
 
 const settingsCollection = 'settings';
 
@@ -10,6 +11,9 @@ export class DBBasedSettings implements PoolSettings {
     private pumpIntervall: number = 30;
     private targetTemperature: number = 26;
     private temperatureThreshold: number = 2;
+    private operationMode = OperationMode.automatic;
+
+    private handlers = new Map<string, Array<PoolSettingChangedHandler>>();
 
     constructor(
          private conn: DBConnection
@@ -47,8 +51,28 @@ export class DBBasedSettings implements PoolSettings {
     getTemperatureThreshold(): number { return this.temperatureThreshold; }
     setTemperatureThreshold(v: number) { this.update(v, 'temperatureThreshold'); }
 
+    getOperationMode(): OperationMode { return this.operationMode; }
+    setOperationMode(v: OperationMode) { this.update(v, 'operationMode'); }
+
+    subscribe(setting: string, f: PoolSettingChangedHandler) {
+        const entry = this.handlers.get(setting);
+
+        if (entry !== undefined)
+            entry.push(f);
+        else if (this.hasOwnProperty(setting))
+            this.handlers.set(setting, [ f ]);
+        else
+            throw Error(`Unknown setting ${setting}!`);
+    }
+
     private update(v: any, name: string) {
+        if (this[name] === v)
+            return;
+
         this[name] = v;
+
+        this.notify(name);
+
         let dbconn: Db;
         this.conn.connect()
         .then(db => {
@@ -57,5 +81,13 @@ export class DBBasedSettings implements PoolSettings {
         })
         .catch(err => { throw err })
         .then(res => { dbconn.close(); });
+    }
+
+    private notify(name: string) {
+        const entries = this.handlers.get(name);
+
+        if (entries !== undefined) 
+            for (const entry of entries)
+                entry();
     }
 }

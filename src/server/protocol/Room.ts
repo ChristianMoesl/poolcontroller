@@ -6,6 +6,7 @@ import { Socket, SocketFactory, SocketFactoryType, Command, Version, Message } f
 @injectable()
 export class Room {
     private socket: Socket;
+    private roomName: string;
 
     protected constructor(
         @inject(LoggerType) private logger: Logger,
@@ -13,6 +14,7 @@ export class Room {
     ) { }
 
     protected initialize(roomName: string) {
+        this.roomName = roomName;
         this.socket = this.socketFactory.create(`/${roomName}`);
         this.socket.received.subscribe((s, e) => this.onMessageReceive(e));
     }
@@ -55,12 +57,12 @@ export class Room {
     }
 
     private logOutgoing(msg: Message) {
-        this.logger.info(`>>> ${msg.command}`);
+        this.logger.info(`>>> ${msg.command} [${this.roomName}]`);
         this.logData(msg);
     }
 
     private logIncoming(msg: Message) {
-        this.logger.info(`<<< ${msg.command}`);
+        this.logger.info(`<<< ${msg.command} [${this.roomName}]`);
         this.logData(msg);
     }
 

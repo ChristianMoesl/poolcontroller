@@ -1,4 +1,4 @@
-import { container } from '../Config';
+import { createContainer, Container } from '../Config';
 import { expect } from 'chai';
 import { useFakeTimers, spy, SinonFakeTimers, stub } from 'sinon';
 import { Pump } from '../../../src/server/device/Pump';
@@ -8,6 +8,7 @@ import { TemperatureController } from '../../../src/server/controller/Temperatur
 import { WaterLevelController } from '../../../src/server/controller/WaterLevelController';
 
 describe('server/service/PumpController', () => {
+    let container: Container;
     let pump: Pump = null;
     let settings: PoolSettings = null;
     let controller: PumpController = null;
@@ -27,7 +28,7 @@ describe('server/service/PumpController', () => {
     const day = 24 * hour;
 
     beforeEach(() => {
-        container.snapshot();
+        container = createContainer();
         clock = useFakeTimers(startDay.getTime());
         
         settings = container.get<PoolSettings>(PoolSettingsType);
@@ -49,7 +50,7 @@ describe('server/service/PumpController', () => {
 
     afterEach(() => {
         clock.restore();
-        container.restore();
+        container = null;
     });
 
     it('has to pump at least 6 hours a day', () => {

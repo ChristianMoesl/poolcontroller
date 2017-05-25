@@ -1,6 +1,6 @@
-import { container } from '../Config';
+import { createContainer, Container } from '../Config';
 import { expect } from 'chai';
-import { useFakeTimers, spy, SinonFakeTimers, stub } from 'sinon';
+import { useFakeTimers, spy, SinonFakeTimers, stub, sandbox } from 'sinon';
 import { Event, EventDispatcher } from '../../../src/server/util/Event';
 import { DigitalWaterLevelSensor, LowerLevelSensorPinTag, LowerMidLevelSensorPinTag, 
     UpperLevelSensorPinTag, UpperMidLevelSensorPinTag } from '../../../src/server/device/DigitalWaterLevelSensor';
@@ -11,24 +11,29 @@ import { PoolSettings, PoolSettingsType } from '../../../src/server/services/Poo
 import { PeripheralError, PeripheralErrorLevel } from '../../../src/server/device/Peripheral';
 import { WaterLevelController } from '../../../src/server/controller/WaterLevelController';
 import { WaterInlet } from '../../../src/server/device/WaterInlet';
+import { OperationMode } from '../../../src/server/system/OperationMode';
 
 describe('server/controller/WaterLevelController', () => {
-    let inlet: WaterInlet = null;
-    let level: DigitalWaterLevelSensor = null;
-    let controller: WaterLevelController = null;
-    let settings: PoolSettings = null;
-    let waterLevel = 50;
-    let isInletOn = false;
-    let levelChanged = new EventDispatcher<WaterLevelSensor, number>();
-    let clock: SinonFakeTimers = null;
+    let container: Container;
+    let inlet: WaterInlet;
+    let level: DigitalWaterLevelSensor;
+    let controller: WaterLevelController;
+    let settings: PoolSettings;
+    let waterLevel: number;
+    let isInletOn: boolean;
+    let levelChanged: EventDispatcher<WaterLevelSensor, number>;
+    let clock: SinonFakeTimers;
 
     beforeEach(() => {
-        container.snapshot();
+        container = createContainer();
         clock = useFakeTimers();
-        
+
         level = container.get<WaterLevelSensor>(WaterLevelSensorType) as DigitalWaterLevelSensor;
         inlet = container.get<WaterInlet>(WaterInlet);
         settings = container.get<PoolSettings>(PoolSettingsType);
+        waterLevel = 50;
+        levelChanged = new EventDispatcher<WaterLevelSensor, number>();
+        isInletOn = false;
 
         stub(level, 'getWaterLevel').callsFake(() => waterLevel);
         stub(level, 'changed').callsFake(() => levelChanged);
@@ -40,7 +45,6 @@ describe('server/controller/WaterLevelController', () => {
 
     afterEach(() => {
         clock.restore();
-        container.restore();
     });
 
     it(`has to get water when level <= ${WaterLevelController.lowerInletThreshold}%`, () => {
@@ -105,5 +109,17 @@ describe('server/controller/WaterLevelController', () => {
         waterLevel = WaterLevelController.lowerInletThreshold - 0.1;
         levelChanged.dispatch(level, waterLevel);
         expect(controller.isRequiredToPump()).to.be.false;
+    });
+
+    it ('has to stop operating in manual mode', () => {
+        waterLevel = WaterLevelController.lowerInletThreshold;
+        levelChanged.dispatch(level, waterLevel);
+        expect(isInletOn).to.be.true;
+
+        settings.setOperationMode(OperationMode.manual);
+
+        waterLevel = WaterLevelController.upperInletThreshold;
+        levelChanged.dispatch(level, waterLevel);
+        expect(isInletOn).to.be.true;
     });
 });

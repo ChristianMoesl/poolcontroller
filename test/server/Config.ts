@@ -7,7 +7,7 @@ import { StringType } from '../../src/server/Types';
 import { PoolController } from '../../src/server/controller/PoolController';
 import { PumpController } from '../../src/server/controller/PumpController';
 import { TemperatureController, RoofTemperatureSensorTag, 
-        PoolTemperatureSensorTag } from '../../src/server/controller/TemperatureController';
+    PoolTemperatureSensorTag } from '../../src/server/controller/TemperatureController';
 import { WaterLevelController } from '../../src/server/controller/WaterLevelController';
 
 // services
@@ -15,6 +15,7 @@ import { SocketFactory, SocketFactoryType } from '../../src/server/services/Sock
 import { IoSocketFactory } from '../../src/server/util/IoSocket';
 import { Logger, LoggerType } from '../../src/server/services/Logger';
 import { log } from '../../src/server/util/Log';
+import { SystemEventDispatcher } from '../../src/server/services/SystemEventDispatcher';
 
 // device
 import { TemperatureSensor } from '../../src/server/device/TemperatureSensor';
@@ -42,74 +43,79 @@ import { AnalogChannel, AnalogChannelType } from '../../src/server/hardware/Anal
 import { DigitalPinMock } from './mocks/DigitalPinMock';
 import { AnalogChannelMock } from './mocks/AnalogChannelMock';
 
-const container = new Container();
-// container.applyMiddleware(makeLoggerMiddleware());
+export { Container };
 
-/*
- *  ============= CONTROLLER =================
- */ 
-container.bind<PoolController>(PoolController).toSelf().inSingletonScope();
-container.bind<PumpController>(PumpController).toSelf().inSingletonScope();
-container.bind<TemperatureController>(TemperatureController).toSelf().inSingletonScope();
-container.bind<WaterLevelController>(WaterLevelController).toSelf().inSingletonScope();
-container.bind<string>(StringType).toConstantValue('Roof temperature Sensor').whenParentNamed(RoofTemperatureSensorTag);
-container.bind<string>(StringType).toConstantValue('Pool temperature Sensor').whenParentNamed(PoolTemperatureSensorTag);
+export function createContainer(): Container {
+    const container = new Container();
+    // container.applyMiddleware(makeLoggerMiddleware());
 
-/*
- *  ============= SERVICES =================
- */ 
-container.bind<Logger>(LoggerType).toConstantValue(log);
-container.bind<SocketFactory>(SocketFactoryType).to(IoSocketFactory);
-container.bind<PoolSettings>(PoolSettingsType).to(DBBasedSettings).inSingletonScope();
+    /*
+    *  ============= CONTROLLER =================
+    */ 
+    container.bind<PoolController>(PoolController).toSelf().inSingletonScope();
+    container.bind<PumpController>(PumpController).toSelf().inSingletonScope();
+    container.bind<TemperatureController>(TemperatureController).toSelf().inSingletonScope();
+    container.bind<WaterLevelController>(WaterLevelController).toSelf().inSingletonScope();
+    container.bind<string>(StringType).toConstantValue('Roof temperature Sensor').whenParentNamed(RoofTemperatureSensorTag);
+    container.bind<string>(StringType).toConstantValue('Pool temperature Sensor').whenParentNamed(PoolTemperatureSensorTag);
 
-/*
- *  ============= DEVICE =================
- */ 
-// Temperature sensor
-container.bind<TemperatureSensor>(TemperatureSensor).toSelf();
-container.bind<string>(StringType).toConstantValue('Water pump').whenInjectedInto(Pump);
+    /*
+    *  ============= SERVICES =================
+    */ 
+    container.bind<Logger>(LoggerType).toConstantValue(log);
+    container.bind<SocketFactory>(SocketFactoryType).to(IoSocketFactory);
+    container.bind<PoolSettings>(PoolSettingsType).to(DBBasedSettings).inSingletonScope();
+    container.bind<SystemEventDispatcher>(SystemEventDispatcher).toSelf().inSingletonScope();
 
-// Pump 
-container.bind<Pump>(Pump).toSelf().inSingletonScope();
-container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(PumpOnPinTag);
+    /*
+    *  ============= DEVICE =================
+    */ 
+    // Temperature sensor
+    container.bind<TemperatureSensor>(TemperatureSensor).toSelf();
+    container.bind<string>(StringType).toConstantValue('Water pump').whenInjectedInto(Pump);
 
-// Water level sensor
-container.bind<WaterLevelSensor>(WaterLevelSensorType).to(DigitalWaterLevelSensor).inSingletonScope();
-container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(UpperLevelSensorPinTag);
-container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(LowerLevelSensorPinTag);
-container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(LowerMidLevelSensorPinTag);
-container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(UpperMidLevelSensorPinTag);
-container.bind<string>(StringType).toConstantValue('Water level sensor').whenInjectedInto(DigitalWaterLevelSensor);
+    // Pump 
+    container.bind<Pump>(Pump).toSelf().inSingletonScope();
+    container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(PumpOnPinTag);
 
-// Water inlet
-container.bind<WaterInlet>(WaterInlet).toSelf().inSingletonScope();
-container.bind<string>(StringType).toConstantValue('Water inlet').whenInjectedInto(WaterInlet);
-container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(WaterInletPinTag);
+    // Water level sensor
+    container.bind<WaterLevelSensor>(WaterLevelSensorType).to(DigitalWaterLevelSensor).inSingletonScope();
+    container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(UpperLevelSensorPinTag);
+    container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(LowerLevelSensorPinTag);
+    container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(LowerMidLevelSensorPinTag);
+    container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(UpperMidLevelSensorPinTag);
+    container.bind<string>(StringType).toConstantValue('Water level sensor').whenInjectedInto(DigitalWaterLevelSensor);
 
-// Three way valve
-container.bind<ThreeWayValve>(ThreeWayValve).toSelf().inSingletonScope();
-container.bind<string>(StringType).toConstantValue('Water valve').whenInjectedInto(ThreeWayValve);
-container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(ValvePos1PinTag);
-container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(ValvePos2PinTag);
+    // Water inlet
+    container.bind<WaterInlet>(WaterInlet).toSelf().inSingletonScope();
+    container.bind<string>(StringType).toConstantValue('Water inlet').whenInjectedInto(WaterInlet);
+    container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(WaterInletPinTag);
 
-/*
- *  ============= PROTOCOL =================
- */ 
-container.bind<Protocol>(Protocol).toSelf();
-container.bind<SettingsRoom>(SettingsRoom).toSelf();
+    // Three way valve
+    container.bind<ThreeWayValve>(ThreeWayValve).toSelf().inSingletonScope();
+    container.bind<string>(StringType).toConstantValue('Water valve').whenInjectedInto(ThreeWayValve);
+    container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(ValvePos1PinTag);
+    container.bind<DigitalPin>(DigitalPinType).toConstantValue(new DigitalPinMock()).whenTargetNamed(ValvePos2PinTag);
 
-/*
- *  ============= DATABASE =================
- */ 
-container.bind<string>(StringType)
+    /*
+    *  ============= PROTOCOL =================
+    */ 
+    container.bind<Protocol>(Protocol).toSelf();
+    container.bind<SettingsRoom>(SettingsRoom).toSelf();
+
+    /*
+    *  ============= DATABASE =================
+    */ 
+    container.bind<string>(StringType)
         .toConstantValue('mongodb://localhost:27017/poolcontroller')
         .whenTargetNamed(DBConnectionStringTag);
-container.bind<DBConnection>(DBConnection).toSelf();
+    container.bind<DBConnection>(DBConnection).toSelf();
 
-/*
- *  ============= MOCKS =================
- */ 
-container.bind<DigitalPin>(DigitalPinType).to(DigitalPinMock).whenTargetIsDefault();
-container.bind<AnalogChannel>(AnalogChannelType).to(AnalogChannelMock);
+    /*
+    *  ============= MOCKS =================
+    */ 
+    container.bind<DigitalPin>(DigitalPinType).to(DigitalPinMock).whenTargetIsDefault();
+    container.bind<AnalogChannel>(AnalogChannelType).to(AnalogChannelMock);
 
-export { container }
+    return container;
+}

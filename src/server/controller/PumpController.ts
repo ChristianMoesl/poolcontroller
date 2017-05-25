@@ -4,6 +4,7 @@ import { PoolSettings, PoolSettingsType } from '../services/PoolSettings';
 import { Logger } from '../services/Logger';
 import { WaterLevelController } from './WaterLevelController';
 import { TemperatureController } from './TemperatureController';
+import { OperationMode } from '../system/OperationMode';
 
 enum State {
     idle,
@@ -25,6 +26,7 @@ export class PumpController {
         private temperatureController: TemperatureController
     ) {
         setInterval(() => this.tick(), 1000 * 60);
+        this.settings.subscribe('operationMode', () => this.onOperationModeChange());
     }
 
     private tick(): void {
@@ -35,12 +37,22 @@ export class PumpController {
 
         this.previousDay = day;
 
-        if (!this.waterLevelController.isAllowedToPump())
+        this.processStateMachine();
+
+        this.isMidnightPassed = false;
+    }
+
+    private isAllowedToOperate() {
+        return this.waterLevelController.isAllowedToPump() && this.settings.getOperationMode() === OperationMode.automatic;
+    }
+
+    private processStateMachine() {
+        if (!this.isAllowedToOperate())
             this.temperatureController.reset();
 
         switch (this.state) {
             case State.idle:
-            if (this.waterLevelController.isAllowedToPump()) {
+            if (this.isAllowedToOperate()) {
                 if (this.waterLevelController.isRequiredToPump()) {
                     this.pump.turnOn();
                     this.state = State.waterLevel;
@@ -77,8 +89,14 @@ export class PumpController {
             }
             break;
         }
+    }
 
-        this.isMidnightPassed = false;
+    private onOperationModeChange() {
+        if (this.settings.getOperationMode() == OperationMode.automatic) {
+            this.pump.turnOff();
+            this.processStateMachine();
+        } else
+            this.state = State.idle;
     }
 
     private getDay(): number {

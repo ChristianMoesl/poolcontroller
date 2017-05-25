@@ -3,6 +3,7 @@ import { injectable, inject, named } from 'inversify';
 import { WaterInlet } from '../device/WaterInlet';
 import { WaterLevelSensor, WaterLevelSensorType } from '../device/WaterLevelSensor';
 import { PoolSettings, PoolSettingsType } from '../services/PoolSettings';
+import { OperationMode } from '../system/OperationMode';
 
 enum State {
     idle,
@@ -26,10 +27,12 @@ export class WaterLevelController {
         @inject(WaterLevelSensorType) private levelSensor: WaterLevelSensor
     ) { 
         this.levelSensor.changed().subscribe((s, e) => this.onLevelChanged(e));
+        this.settings.subscribe('operationMode', () => this.onOperationModeChanged());
     }
 
     isAllowedToPump(): boolean {
-        return this.levelSensor.getWaterLevel() >= WaterLevelController.lowerInletThreshold;
+        return this.levelSensor.getWaterLevel() >= WaterLevelController.lowerInletThreshold
+            && this.settings.getOperationMode() === OperationMode.automatic;
     }
 
     isRequiredToPump(): boolean {
@@ -41,23 +44,37 @@ export class WaterLevelController {
 
         this.pumpTime++;
 
-        if (this.pumpTime >= this.settings.getPumpIntervall()) {
+        if (this.pumpTime >= this.settings.getPumpIntervall())
+            this.reset();
+    }
+
+    private reset() {
+        if (this.ticker !== null) {
             clearInterval(this.ticker);
             this.ticker = null;
-            this.state = State.idle;
-        }        
+        }
+        this.state = State.idle;
+    }
+
+    private onOperationModeChanged() {
+        if (this.settings.getOperationMode() === OperationMode.manual)
+            this.reset();
+        else
+            this.inlet.turnOff();
     }
 
     private onLevelChanged(level: number) {
         switch (this.state) {
             case State.idle:
-            if (level <= WaterLevelController.lowerInletThreshold) {
-                this.state = State.filling;
-                this.inlet.turnOn();
-            } else if (level >= WaterLevelController.upperPumpThreshold) {
-                this.state = State.pump;
-                this.pumpTime = 0;
-                this.ticker = setInterval(() => this.tick(), 60 * 1000);
+            if (this.settings.getOperationMode() === OperationMode.automatic) {
+                if (level <= WaterLevelController.lowerInletThreshold) {
+                    this.state = State.filling;
+                    this.inlet.turnOn();
+                } else if (level >= WaterLevelController.upperPumpThreshold) {
+                    this.state = State.pump;
+                    this.pumpTime = 0;
+                    this.ticker = setInterval(() => this.tick(), 60 * 1000);
+                }
             }
             break;
             case State.filling:

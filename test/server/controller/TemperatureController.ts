@@ -1,4 +1,4 @@
-import { container } from '../Config';
+import { createContainer, Container } from '../Config';
 import { expect } from 'chai';
 import { useFakeTimers, spy, SinonFakeTimers, stub } from 'sinon';
 import { Event, EventDispatcher } from '../../../src/server/util/Event';
@@ -11,6 +11,7 @@ import { TemperatureController, PoolTemperatureSensorTag, RoofTemperatureSensorT
 import { ThreeWayValve, ValvePosition } from '../../../src/server/device/ThreeWayValve';
 
 describe('server/controller/TemperatureController', () => {
+    let container: Container;
     let controller: TemperatureController = null;
     let roof: TemperatureSensor = null;
     let pool: TemperatureSensor = null;
@@ -23,7 +24,7 @@ describe('server/controller/TemperatureController', () => {
     let poolTemp = 0;
 
     beforeEach(() => {
-        container.snapshot();
+        container = createContainer();
 
         roof = container.getNamed<TemperatureSensor>(TemperatureSensor, RoofTemperatureSensorTag);
         pool = container.getNamed<TemperatureSensor>(TemperatureSensor, PoolTemperatureSensorTag);
@@ -49,7 +50,7 @@ describe('server/controller/TemperatureController', () => {
     });
 
     afterEach(() => {
-        container.restore();
+        container = null;
     });
 
     it('has to heat up when threshold is reached and target is not reached', () => {

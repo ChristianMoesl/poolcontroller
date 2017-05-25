@@ -1,4 +1,4 @@
-import { container } from '../Config';
+import { createContainer, Container } from '../Config';
 import { expect } from 'chai';
 import { useFakeTimers, spy, SinonFakeTimers, stub } from 'sinon';
 import { DigitalWaterLevelSensor, LowerLevelSensorPinTag, LowerMidLevelSensorPinTag, 
@@ -10,6 +10,7 @@ import { PoolSettings, PoolSettingsType } from '../../../src/server/services/Poo
 import { PeripheralError, PeripheralErrorLevel } from '../../../src/server/device/Peripheral';
 
 describe('server/device/DigitalWaterLevelSensor', () => {
+    let container: Container;
     let upper: DigitalPin = null;
     let upperMid: DigitalPin = null;
     let lowerMid: DigitalPin = null;
@@ -17,7 +18,7 @@ describe('server/device/DigitalWaterLevelSensor', () => {
     let levelSensor: DigitalWaterLevelSensor = null;
 
     beforeEach(() => {
-        container.snapshot();
+        container = createContainer();
         
         upper = container.getNamed<DigitalPin>(DigitalPinType, UpperLevelSensorPinTag);
         upperMid = container.getNamed<DigitalPin>(DigitalPinType, UpperMidLevelSensorPinTag);
@@ -28,7 +29,7 @@ describe('server/device/DigitalWaterLevelSensor', () => {
     });
 
     afterEach(() => {
-        container.restore();
+        container = null;
     });
 
     it('has to emit an error when hardware is incosistent', () => {
