@@ -1,4 +1,5 @@
 import 'hammerjs';
+//import './Socket';
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,6 +11,7 @@ import { router } from './app.router';
 import { store } from './app.store';
 import { StatusComponent } from './status/status.component';
 import { SettingsComponent } from './settings/settings.component';
+import { SettingsService } from './settings/settings.service';
 import { AboutComponent } from './about/about.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
@@ -27,6 +29,9 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     SettingsComponent,
     AboutComponent,
     PageNotFoundComponent,
+  ],
+  providers: [
+    SettingsService,
   ],
   bootstrap: [ AppComponent ]
 })

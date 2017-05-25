@@ -17,22 +17,18 @@ export class SettingsRoom extends Room {
         this.initialize('settings');
     }
 
-    public get(version: Version, data: Object) {
-
-     /*   if (data === null) {
-            this.sendNak(unknownParameter);
-        } else {
-            const serialized = {};
-            Object.keys(settings).forEach((key) => {
-                if (key.startsWith('get')) {
-                    serialized[key] = settings[key]();
-                }
+    get(version: Version, data: Object) {
+        if (version.major === 1 && version.minor === 0) {
+            this.sendAck({
+                pumpTime: this.settings.getPumpTime(),
+                pumpInterval: this.settings.getPumpIntervall(),
             });
-
-            this.sendAck(serialized);
-        }*/
+        } else {
+            this.sendNak(Error.unknownVersion);
+        }
     }
-    public post(version: Version, data: Object) {
+    
+    post(version: Version, data: Object) {
 
      /*   if (data === null) {
             this.sendNak(missingParameter);

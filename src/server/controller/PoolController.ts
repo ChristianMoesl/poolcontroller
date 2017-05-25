@@ -20,9 +20,9 @@ export class PoolController {
     _state: any;
 
     constructor(
-        private protocol: Protocol,
+        private protocol: Protocol/*,
         private temperatureController: TemperatureController,
-        private waterLevelController: WaterLevelController
+        private waterLevelController: WaterLevelController*/
     ) {
    //     super();
 

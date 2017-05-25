@@ -13,7 +13,7 @@ export class Room {
     ) { }
 
     protected initialize(roomName: string) {
-        this.socket = this.socketFactory.create(roomName);
+        this.socket = this.socketFactory.create(`/${roomName}`);
         this.socket.received.subscribe((s, e) => this.onMessageReceive(e));
     }
 
@@ -55,16 +55,17 @@ export class Room {
     }
 
     private logOutgoing(msg: Message) {
-        this.logger.info(`>>> ${Command[msg.command]}`);
+        this.logger.info(`>>> ${msg.command}`);
+        this.logData(msg);
     }
 
     private logIncoming(msg: Message) {
-        this.logger.info(`<<< ${Command[msg.command]}`);
+        this.logger.info(`<<< ${msg.command}`);
         this.logData(msg);
     }
 
     private logData(msg: Message) {
         this.logger.info(`version: ${msg.version.major}.${msg.version.minor}`);
-        this.logger.info(`data:    ${msg.data}`);
+        this.logger.info(`data:    ${JSON.stringify(msg.data)}`);
     }
 }

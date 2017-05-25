@@ -11,9 +11,7 @@ import { io } from './util/IoSocket';
 import * as favicon from 'serve-favicon';
 import { PoolController } from './controller/PoolController';
 
-
 try {
-    const poolController = container.get<PoolController>(PoolController);
     const app = express();
 
     const logStream = {
@@ -29,7 +27,7 @@ try {
     /*
     *  Configure singla page application development server
     */
-    /*if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development') {
         // Step 1: Create & configure a webpack compiler
         const webpack = require('webpack');
         const webpackConfig = require('./webpack.client.config');
@@ -48,7 +46,7 @@ try {
         log.info('Hot module reloading enabled');
     } else {
         log.info('Hot module reloading disabled');
-    } */
+    }
 
     app.use(favicon(path.join(__dirname, '/public/images/favicon.ico')));
 
@@ -132,6 +130,8 @@ try {
     server.on('listening', onListening);
 
     io.attach(server);
+
+    const poolController = container.get<PoolController>(PoolController);
 
 /**
  * Catch every exception and log it.

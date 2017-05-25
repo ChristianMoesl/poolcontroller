@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../app.store';
 import { ADD_SETTING, Setting } from './settings.reducer';
 import { Observable } from 'rxjs/Observable';
+import { SettingsService } from './settings.service';
 
 @Component({
     template: `
@@ -17,8 +18,15 @@ import { Observable } from 'rxjs/Observable';
 export class SettingsComponent {
    private settings: Observable<Array<Setting>>;
 
-    constructor(private store: Store<AppState>) {
+    constructor(
+        private store: Store<AppState>, 
+        private setting: SettingsService
+    ) {
         this.settings = store.select(s => s.settings);
+
+        setInterval(() => {
+            this.setting.send();
+        }, 3000);
         
         this.store.dispatch({ 
             type: ADD_SETTING, 

@@ -8,7 +8,7 @@ import * as ion from 'socket.io';
 
 const io = ion();
 
-/* const connections = [];
+const connections = [];
 
 io.on('connection', (socket) => {
     connections.push(socket);
@@ -18,15 +18,21 @@ io.on('connection', (socket) => {
         connections.splice(connections.indexOf(socket), 1);
         log.info(`User disconnected: ${connections.length} socket(s) connected`);
     });
-}); */
+});
 
 export class IoSocket implements Socket {
     private receivedEvent = new EventDispatcher<Socket, Message>();
     private ns: any;
     
     constructor(private roomName: string, private logger: Logger) {
+        const self = this;
+
         this.ns = io.of(roomName);
-        this.ns.on('message', d => this.onMessage(d));
+        this.ns.on('connection', (socket) => { 
+            socket.on('messageFromClient', (id, msg) => { 
+                self.onMessage(id); 
+            }); 
+        })
      }
 
     get received(): Event<Socket, Message> {
@@ -34,16 +40,16 @@ export class IoSocket implements Socket {
     }
 
     send(message: Message) {
-        this.ns.emit('message', message);
+        this.ns.emit('messageFromServer', message);
     }
 
     private onMessage(data: any) {
         if (data && typeof data === 'object'
-        && data.prototype.hasOwnProperty('command')
-        && data.prototype.hasOwnProperty('version')
-        && data.prototype.hasOwnProperty('data')
-        && data.version.prototype.hasOwnProperty('major')
-        && data.version.prototype.hasOwnProperty('minor')) {
+        && data.hasOwnProperty('command')
+        && data.hasOwnProperty('version')
+        && data.hasOwnProperty('data')
+        && data.version.hasOwnProperty('major')
+        && data.version.hasOwnProperty('minor')) {
             this.receivedEvent.dispatch(this, data);
         } else {
             this.logger.warn(`Invalid object received in room ${this.roomName}`);
