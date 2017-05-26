@@ -12,14 +12,11 @@ fs.readdirSync('node_modules')
 module.exports = function config(env) {
     const isDevelopment = env && env.development;
 
-    if (isDevelopment)
-        fs.copySync('./webpack.client.config.js', './src/server/webpack.client.config.js', { overwrite: true });
-
     return {
         resolve: {
             extensions: ['.ts', '.tsx', '.js', '.jsx']
         },
-        context: path.join(__dirname, '/src/server'),
+        context: path.join(__dirname, '/src'),
         entry: './Server.ts',
         target: 'node',
         devtool: 'inline-sourcemap',
