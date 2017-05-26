@@ -1,43 +1,43 @@
 import 'reflect-metadata';
 import { Container, injectable, inject, named } from 'inversify';
 import { makeLoggerMiddleware } from 'inversify-logger-middleware';
-import { StringType } from '../../src/server/Types';
+import { StringType } from '../src/Types';
 
 // controller
-import { PoolController } from '../../src/server/controller/PoolController';
-import { PumpController } from '../../src/server/controller/PumpController';
+import { PoolController } from '../src/controller/PoolController';
+import { PumpController } from '../src/controller/PumpController';
 import { TemperatureController, RoofTemperatureSensorTag, 
-    PoolTemperatureSensorTag } from '../../src/server/controller/TemperatureController';
-import { WaterLevelController } from '../../src/server/controller/WaterLevelController';
+    PoolTemperatureSensorTag } from '../src/controller/TemperatureController';
+import { WaterLevelController } from '../src/controller/WaterLevelController';
 
 // services
-import { SocketFactory, SocketFactoryType } from '../../src/server/services/Socket';
-import { IoSocketFactory } from '../../src/server/util/IoSocket';
-import { Logger, LoggerType } from '../../src/server/services/Logger';
-import { log } from '../../src/server/util/Log';
-import { SystemEventDispatcher } from '../../src/server/services/SystemEventDispatcher';
+import { SocketFactory, SocketFactoryType } from '../src/services/Socket';
+import { IoSocketFactory } from '../src/util/IoSocket';
+import { Logger, LoggerType } from '../src/services/Logger';
+import { log } from '../src/util/Log';
+import { SystemEventDispatcher } from '../src/services/SystemEventDispatcher';
 
 // device
-import { TemperatureSensor } from '../../src/server/device/TemperatureSensor';
-import { Pump, PumpOnPinTag } from '../../src/server/device/Pump';
+import { TemperatureSensor } from '../src/device/TemperatureSensor';
+import { Pump, PumpOnPinTag } from '../src/device/Pump';
 import { DigitalWaterLevelSensor, LowerLevelSensorPinTag, LowerMidLevelSensorPinTag, 
-    UpperLevelSensorPinTag,UpperMidLevelSensorPinTag} from '../../src/server/device/DigitalWaterLevelSensor';
-import { WaterLevelSensor, WaterLevelSensorType } from '../../src/server/device/WaterLevelSensor';
-import { WaterInlet, WaterInletPinTag } from '../../src/server/device/WaterInlet';
-import { ThreeWayValve, ValvePos1PinTag, ValvePos2PinTag } from '../../src/server/device/ThreeWayValve';
+    UpperLevelSensorPinTag,UpperMidLevelSensorPinTag} from '../src/device/DigitalWaterLevelSensor';
+import { WaterLevelSensor, WaterLevelSensorType } from '../src/device/WaterLevelSensor';
+import { WaterInlet, WaterInletPinTag } from '../src/device/WaterInlet';
+import { ThreeWayValve, ValvePos1PinTag, ValvePos2PinTag } from '../src/device/ThreeWayValve';
 
 // protocol
-import { Protocol } from '../../src/server/protocol/Protocol';
-import { SettingsRoom } from '../../src/server/protocol/SettingsRoom';
+import { Protocol } from '../src/protocol/Protocol';
+import { SettingsRoom } from '../src/protocol/SettingsRoom';
 
 // database
-import { DBConnection, DBConnectionStringTag } from '../../src/server/database/DBConnection';
-import { DBBasedSettings } from '../../src/server/database/DBBasedSettings';
+import { DBConnection, DBConnectionStringTag } from '../src/database/DBConnection';
+import { DBBasedSettings } from '../src/database/DBBasedSettings';
 
 // root
-import { PoolSettings, PoolSettingsType } from '../../src/server/services/PoolSettings';
-import { DigitalPin, DigitalPinType } from '../../src/server/hardware/DigitalPin';
-import { AnalogChannel, AnalogChannelType } from '../../src/server/hardware/AnalogChannel';
+import { PoolSettings, PoolSettingsType } from '../src/services/PoolSettings';
+import { DigitalPin, DigitalPinType } from '../src/hardware/DigitalPin';
+import { AnalogChannel, AnalogChannelType } from '../src/hardware/AnalogChannel';
 
 // mocks
 import { DigitalPinMock } from './mocks/DigitalPinMock';

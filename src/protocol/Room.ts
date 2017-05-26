@@ -1,6 +1,6 @@
 import { injectable, inject } from 'inversify';
 import { Logger, LoggerType } from '../services/Logger';
-import { ProtocolError } from '../../common/protocol/ProtocolError';
+import { ProtocolError } from 'poolcontroller-protocol';
 import { Socket, SocketFactory, SocketFactoryType, Command, Version, Message } from '../services/Socket';
 
 @injectable()

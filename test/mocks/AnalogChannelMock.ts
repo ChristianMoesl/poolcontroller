@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
-import { Event, EventDispatcher } from '../../../src/server/util/Event';
-import { AnalogChannel } from '../../../src/server/hardware/AnalogChannel';
+import { Event, EventDispatcher } from '../../src/util/Event';
+import { AnalogChannel } from '../../src/hardware/AnalogChannel';
 
 @injectable()
 export class AnalogChannelMock implements AnalogChannel {

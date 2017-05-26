@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { useFakeTimers, spy } from 'sinon';
-//import { Pump } from '../../../src/server/hardware/Pump';
+//import { Pump } from '../../src/hardware/Pump';
 
 describe('server/device/Pump', () => {
     const name = 'Hello World';

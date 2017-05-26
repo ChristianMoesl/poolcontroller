@@ -1,10 +1,10 @@
 import { inject, injectable } from 'inversify';
 import { Room } from './Room';
-import * as Error from '../../common/protocol/ProtocolError';
 import { Version } from '../services/Socket';
 import { Logger, LoggerType } from '../services/Logger';
 import { SocketFactory, SocketFactoryType } from '../services/Socket';
 import { PoolSettings, PoolSettingsType } from '../services/PoolSettings';
+import * as Error from 'poolcontroller-protocol';
 
 @injectable()
 export class SettingsRoom extends Room {

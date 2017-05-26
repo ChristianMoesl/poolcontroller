@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
-import { DigitalPin, DigitalPinState } from '../../../src/server/hardware/DigitalPin';
-import { Event, EventDispatcher } from '../../../src/server/util/Event';
+import { DigitalPin, DigitalPinState } from '../../src/hardware/DigitalPin';
+import { Event, EventDispatcher } from '../../src/util/Event';
 
 @injectable()
 export class DigitalPinMock implements DigitalPin {

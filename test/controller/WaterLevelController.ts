@@ -1,17 +1,17 @@
 import { createContainer, Container } from '../Config';
 import { expect } from 'chai';
 import { useFakeTimers, spy, SinonFakeTimers, stub, sandbox } from 'sinon';
-import { Event, EventDispatcher } from '../../../src/server/util/Event';
+import { Event, EventDispatcher } from '../../src/util/Event';
 import { DigitalWaterLevelSensor, LowerLevelSensorPinTag, LowerMidLevelSensorPinTag, 
-    UpperLevelSensorPinTag, UpperMidLevelSensorPinTag } from '../../../src/server/device/DigitalWaterLevelSensor';
-import { WaterLevelSensor, WaterLevelSensorType } from '../../../src/server/device/WaterLevelSensor';
-import { DigitalPin, DigitalPinType, DigitalPinState } from '../../../src/server/hardware/DigitalPin';
-import { PumpController } from '../../../src/server/controller/PumpController';
-import { PoolSettings, PoolSettingsType } from '../../../src/server/services/PoolSettings';
-import { PeripheralError, PeripheralErrorLevel } from '../../../src/server/device/Peripheral';
-import { WaterLevelController } from '../../../src/server/controller/WaterLevelController';
-import { WaterInlet } from '../../../src/server/device/WaterInlet';
-import { OperationMode } from '../../../src/server/system/OperationMode';
+    UpperLevelSensorPinTag, UpperMidLevelSensorPinTag } from '../../src/device/DigitalWaterLevelSensor';
+import { WaterLevelSensor, WaterLevelSensorType } from '../../src/device/WaterLevelSensor';
+import { DigitalPin, DigitalPinType, DigitalPinState } from '../../src/hardware/DigitalPin';
+import { PumpController } from '../../src/controller/PumpController';
+import { PoolSettings, PoolSettingsType } from '../../src/services/PoolSettings';
+import { PeripheralError, PeripheralErrorLevel } from '../../src/device/Peripheral';
+import { WaterLevelController } from '../../src/controller/WaterLevelController';
+import { WaterInlet } from '../../src/device/WaterInlet';
+import { OperationMode } from '../../src/system/OperationMode';
 
 describe('server/controller/WaterLevelController', () => {
     let container: Container;

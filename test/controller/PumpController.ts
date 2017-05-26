@@ -1,11 +1,11 @@
 import { createContainer, Container } from '../Config';
 import { expect } from 'chai';
 import { useFakeTimers, spy, SinonFakeTimers, stub } from 'sinon';
-import { Pump } from '../../../src/server/device/Pump';
-import { PumpController } from '../../../src/server/controller/PumpController';
-import { PoolSettings, PoolSettingsType } from '../../../src/server/services/PoolSettings';
-import { TemperatureController } from '../../../src/server/controller/TemperatureController';
-import { WaterLevelController } from '../../../src/server/controller/WaterLevelController';
+import { Pump } from '../../src/device/Pump';
+import { PumpController } from '../../src/controller/PumpController';
+import { PoolSettings, PoolSettingsType } from '../../src/services/PoolSettings';
+import { TemperatureController } from '../../src/controller/TemperatureController';
+import { WaterLevelController } from '../../src/controller/WaterLevelController';
 
 describe('server/service/PumpController', () => {
     let container: Container;

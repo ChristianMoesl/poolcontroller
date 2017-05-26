@@ -1,14 +1,14 @@
 import { createContainer, Container } from '../Config';
 import { expect } from 'chai';
 import { useFakeTimers, spy, SinonFakeTimers, stub } from 'sinon';
-import { Event, EventDispatcher } from '../../../src/server/util/Event';
-import { DigitalPin, DigitalPinType, DigitalPinState } from '../../../src/server/hardware/DigitalPin';
-import { PumpController } from '../../../src/server/controller/PumpController';
-import { PoolSettings, PoolSettingsType } from '../../../src/server/services/PoolSettings';
-import { PeripheralError, PeripheralErrorLevel } from '../../../src/server/device/Peripheral';
-import { TemperatureSensor } from '../../../src/server/device/TemperatureSensor';
-import { TemperatureController, PoolTemperatureSensorTag, RoofTemperatureSensorTag } from '../../../src/server/controller/TemperatureController';
-import { ThreeWayValve, ValvePosition } from '../../../src/server/device/ThreeWayValve';
+import { Event, EventDispatcher } from '../../src/util/Event';
+import { DigitalPin, DigitalPinType, DigitalPinState } from '../../src/hardware/DigitalPin';
+import { PumpController } from '../../src/controller/PumpController';
+import { PoolSettings, PoolSettingsType } from '../../src/services/PoolSettings';
+import { PeripheralError, PeripheralErrorLevel } from '../../src/device/Peripheral';
+import { TemperatureSensor } from '../../src/device/TemperatureSensor';
+import { TemperatureController, PoolTemperatureSensorTag, RoofTemperatureSensorTag } from '../../src/controller/TemperatureController';
+import { ThreeWayValve, ValvePosition } from '../../src/device/ThreeWayValve';
 
 describe('server/controller/TemperatureController', () => {
     let container: Container;

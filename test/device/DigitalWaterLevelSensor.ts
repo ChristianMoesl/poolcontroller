@@ -2,12 +2,12 @@ import { createContainer, Container } from '../Config';
 import { expect } from 'chai';
 import { useFakeTimers, spy, SinonFakeTimers, stub } from 'sinon';
 import { DigitalWaterLevelSensor, LowerLevelSensorPinTag, LowerMidLevelSensorPinTag, 
-    UpperLevelSensorPinTag, UpperMidLevelSensorPinTag } from '../../../src/server/device/DigitalWaterLevelSensor';
-import { WaterLevelSensor, WaterLevelSensorType } from '../../../src/server/device/WaterLevelSensor';
-import { DigitalPin, DigitalPinType, DigitalPinState } from '../../../src/server/hardware/DigitalPin';
-import { PumpController } from '../../../src/server/controller/PumpController';
-import { PoolSettings, PoolSettingsType } from '../../../src/server/services/PoolSettings';
-import { PeripheralError, PeripheralErrorLevel } from '../../../src/server/device/Peripheral';
+    UpperLevelSensorPinTag, UpperMidLevelSensorPinTag } from '../../src/device/DigitalWaterLevelSensor';
+import { WaterLevelSensor, WaterLevelSensorType } from '../../src/device/WaterLevelSensor';
+import { DigitalPin, DigitalPinType, DigitalPinState } from '../../src/hardware/DigitalPin';
+import { PumpController } from '../../src/controller/PumpController';
+import { PoolSettings, PoolSettingsType } from '../../src/services/PoolSettings';
+import { PeripheralError, PeripheralErrorLevel } from '../../src/device/Peripheral';
 
 describe('server/device/DigitalWaterLevelSensor', () => {
     let container: Container;

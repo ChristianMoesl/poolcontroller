@@ -1,8 +1,8 @@
 import { createContainer, Container } from '../Config';
 import { expect } from 'chai';
-import { PoolSettings, PoolSettingsType } from '../../../src/server/services/PoolSettings';
-import { DBBasedSettings } from '../../../src/server/database/DBBasedSettings';
-import { OperationMode } from '../../../src/server/system/OperationMode';
+import { PoolSettings, PoolSettingsType } from '../../src/services/PoolSettings';
+import { DBBasedSettings } from '../../src/database/DBBasedSettings';
+import { OperationMode } from '../../src/system/OperationMode';
 
 describe('server/database/DBBasedSettings', () => {
     let container: Container;
