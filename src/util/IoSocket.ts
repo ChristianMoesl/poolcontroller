@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { Logger, LoggerType } from '../services/Logger';
-import { Socket, SocketFactory, Message } from '../services/Socket';
+import { Socket, SocketFactory } from '../services/Socket';
 import { EventDispatcher, Event } from '../util/Event';
 
 import { log } from './Log';
@@ -21,7 +21,7 @@ io.on('connection', (socket) => {
 });
 
 export class IoSocket implements Socket {
-    private receivedEvent = new EventDispatcher<Socket, Message>();
+    private receivedEvent = new EventDispatcher<Socket, object>();
     private ns: any;
     
     constructor(private roomName: string, private logger: Logger) {
@@ -29,18 +29,18 @@ export class IoSocket implements Socket {
 
         this.ns = io.of(roomName);
         this.ns.on('connection', (socket) => { 
-            socket.on('messageFromClient', (id, msg) => { 
+            socket.on('client-message', (id, msg) => { 
                 self.onMessage(id); 
             }); 
         })
      }
 
-    get received(): Event<Socket, Message> {
+    get received(): Event<Socket, object> {
         return this.receivedEvent;
     }
 
-    send(message: Message) {
-        this.ns.emit('messageFromServer', message);
+    send(data: object) {
+        this.ns.emit('server-message', data);
     }
 
     private onMessage(data: any) {

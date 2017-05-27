@@ -1,7 +1,7 @@
 import { injectable, inject } from 'inversify';
 import { Logger, LoggerType } from '../services/Logger';
-import { ProtocolError } from 'poolcontroller-protocol';
-import { Socket, SocketFactory, SocketFactoryType, Command, Version, Message } from '../services/Socket';
+import { ProtocolError, Message, Command, Version } from 'poolcontroller-protocol';
+import { Socket, SocketFactory, SocketFactoryType, } from '../services/Socket';
 
 @injectable()
 export class Room {
@@ -16,7 +16,13 @@ export class Room {
     protected initialize(roomName: string) {
         this.roomName = roomName;
         this.socket = this.socketFactory.create(`/${roomName}`);
-        this.socket.received.subscribe((s, e) => this.onMessageReceive(e));
+        this.socket.received.subscribe((s, e) => {
+            try {
+                this.onMessageReceive(Message.deserialize(e));
+            } catch (e) {
+                this.logger.warn(e);
+            }
+        });
     }
 
     public post(version: Version, data: Object) { }
@@ -24,50 +30,50 @@ export class Room {
     public get(version: Version, data: Object) { }
 
     public sendNotification(version: Version, data: Object) {
-        const msg = { command: Command[Command.NOTIFICATION], version: version, data: data };
+        const msg = new Message(Command.NOTIFICATION, this.roomName, version, data);
         this.logOutgoing(msg);
-        this.socket.send(msg);
+        this.socket.send(msg.serialize());
     }
 
     public sendAck(data: Object = {}) {
-        const msg = { command: Command[Command.ACK], version: { major: 1, minor: 0 }, data: data };
+        const msg = new Message(Command.ACK, this.roomName, new Version(1, 0), data);
         this.logOutgoing(msg);
-        this.socket.send(msg);
+        this.socket.send(msg.serialize());
     }
 
     public sendNak(error: ProtocolError) {
-        const msg = { command: Command[Command.NAK], version: { major: 1, minor: 0 }, data: { error: error }};
+        const msg = new Message(Command.NAK, this.roomName, new Version(1, 0), { error: error });
         this.logOutgoing(msg);
-        this.socket.send(msg);
+        this.socket.send(msg.serialize());
     }
 
     private onMessageReceive(e: Message) {
-        switch (e.command) {
-            case Command[Command.POST]: 
-                this.logIncoming({ command: Command[Command.POST], version: e.version, data: e.data });
-                this.post(e.version, e.data);
+        switch (e.getCommand()) {
+            case Command.POST: 
+                this.logIncoming(e);
+                this.post(e.getVersion(), e.getData());
                 break;
-            case Command[Command.GET]: 
-                this.logIncoming({ command: Command[Command.GET], version: e.version, data: e.data });
-                this.get(e.version, e.data);
+            case Command.GET: 
+                this.logIncoming(e);
+                this.get(e.getVersion(), e.getData());
                 break;
             default:
-                this.logger.warn(`Invalid command ${e.command} received`);
+                this.logger.warn(`Invalid command ${e.getCommand()} received`);
         }
     }
 
     private logOutgoing(msg: Message) {
-        this.logger.info(`>>> ${msg.command} [${this.roomName}]`);
+        this.logger.info(`>>> ${Command[msg.getCommand()]} [${this.roomName}]`);
         this.logData(msg);
     }
 
     private logIncoming(msg: Message) {
-        this.logger.info(`<<< ${msg.command} [${this.roomName}]`);
+        this.logger.info(`<<< ${Command[msg.getCommand()]} [${this.roomName}]`);
         this.logData(msg);
     }
 
     private logData(msg: Message) {
-        this.logger.info(`version: ${msg.version.major}.${msg.version.minor}`);
-        this.logger.info(`data:    ${JSON.stringify(msg.data)}`);
+        this.logger.info(`version: ${msg.getVersion().major}.${msg.getVersion().minor}`);
+        this.logger.info(`data:    ${JSON.stringify(msg.getData())}`);
     }
 }

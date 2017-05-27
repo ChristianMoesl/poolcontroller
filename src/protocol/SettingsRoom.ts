@@ -1,10 +1,9 @@
 import { inject, injectable } from 'inversify';
 import { Room } from './Room';
-import { Version } from '../services/Socket';
 import { Logger, LoggerType } from '../services/Logger';
 import { SocketFactory, SocketFactoryType } from '../services/Socket';
 import { PoolSettings, PoolSettingsType } from '../services/PoolSettings';
-import * as Error from 'poolcontroller-protocol';
+import { unknownVersion, Version, Message, Command } from 'poolcontroller-protocol';
 
 @injectable()
 export class SettingsRoom extends Room {
@@ -24,7 +23,7 @@ export class SettingsRoom extends Room {
                 pumpInterval: this.settings.getPumpIntervall(),
             });
         } else {
-            this.sendNak(Error.unknownVersion);
+            this.sendNak(unknownVersion);
         }
     }
     
