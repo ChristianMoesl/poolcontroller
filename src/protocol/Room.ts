@@ -41,8 +41,14 @@ export class Room {
         this.socket.send(msg.serialize());
     }
 
-    public sendNak(error: ProtocolError) {
-        const msg = new Message(Command.NAK, this.roomName, new Version(1, 0), { error: error });
+    public sendNak(error: ProtocolError, description?: string) {
+        let msg;
+
+        if (description)
+            msg = new Message(Command.NAK, this.roomName, new Version(1, 0), { error: error, description: description });
+        else
+            msg = new Message(Command.NAK, this.roomName, new Version(1, 0), { error: error });
+
         this.logOutgoing(msg);
         this.socket.send(msg.serialize());
     }
