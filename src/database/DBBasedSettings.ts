@@ -40,19 +40,51 @@ export class DBBasedSettings implements PoolSettings {
     }
 
     getPumpTime(): number { return this.pumpTime; }
-    setPumpTime(v: number) { this.update(v, 'pumpTime'); }
+    setPumpTime(v: number): RangeError | null {
+        if (v >= 0 && v < 24 * 60) {
+            this.update(v, 'pumpTime');
+
+            return null;
+        }
+        return RangeError(`pumpTime has to be in the range of [0 - 24 * 60[ , but was ${v}`);
+    }
 
     getPumpIntervall(): number { return this.pumpIntervall; }
-    setPumpIntervall(v: number) { this.update(v, 'pumpIntervall')}
+    setPumpIntervall(v: number): RangeError | null {
+        if (v >= 0 && v < 24 * 60) {
+            this.update(v, 'pumpIntervall');
+
+            return null;
+        }
+        return RangeError(`pumpIntervall has to be in the range of [0 - 24 * 60[ , but was ${v}`);
+    }
 
     getTargetTemperature(): number { return this.targetTemperature; }
-    setTargetTemperature(v: number) { this.update(v, 'targetTemperature'); }
+    setTargetTemperature(v: number): RangeError | null {
+        if (v >= 10 && v <= 40) {
+            this.update(v, 'targetTemperature');
+
+            return null;
+        }
+        return RangeError(`targetTemperature has to be in the range of [10 - 40] , but was ${v}`);
+    }
 
     getTemperatureThreshold(): number { return this.temperatureThreshold; }
-    setTemperatureThreshold(v: number) { this.update(v, 'temperatureThreshold'); }
+    setTemperatureThreshold(v: number): RangeError | null {
+        if (1 <= v && v <= 10) {
+            this.update(v, 'temperatureThreshold');
+
+            return null;
+        }
+        return RangeError(`temperatureThreshold has to be in the range of [1 - 10] , but was ${v}`);
+    }
 
     getOperationMode(): OperationMode { return this.operationMode; }
-    setOperationMode(v: OperationMode) { this.update(v, 'operationMode'); }
+    setOperationMode(v: OperationMode): RangeError | null {
+        this.update(v, 'operationMode');
+
+        return null;
+    }
 
     subscribe(setting: string, f: PoolSettingChangedHandler) {
         const entry = this.handlers.get(setting);
