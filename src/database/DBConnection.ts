@@ -27,6 +27,14 @@ export class DBConnection {
                 }
                 throw err;
             }
+        }).then(db => {
+            if (db)
+                return db as Db;
+            else {
+                this.logger.error(`Failed to connect to database [${this.connString}] on first connect`);
+                this.logger.error('Ensure if the mongodb server is running');
+                process.exit(1);
+            }
         });
     }
 }
