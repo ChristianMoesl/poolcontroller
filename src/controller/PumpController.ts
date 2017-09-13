@@ -4,7 +4,7 @@ import { PoolSettings, PoolSettingsType } from '../services/PoolSettings';
 import { Logger } from '../services/Logger';
 import { WaterLevelController } from './WaterLevelController';
 import { TemperatureController } from './TemperatureController';
-import { OperationMode } from '../system/OperationMode';
+import { OperationMode } from 'poolcontroller-protocol';
 
 enum State {
     idle,

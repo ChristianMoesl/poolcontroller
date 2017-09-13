@@ -3,7 +3,7 @@ import { injectable, inject, named } from 'inversify';
 import { WaterInlet } from '../device/WaterInlet';
 import { WaterLevelSensor, WaterLevelSensorType } from '../device/WaterLevelSensor';
 import { PoolSettings, PoolSettingsType } from '../services/PoolSettings';
-import { OperationMode } from '../system/OperationMode';
+import { OperationMode } from 'poolcontroller-protocol';
 
 enum State {
     idle,

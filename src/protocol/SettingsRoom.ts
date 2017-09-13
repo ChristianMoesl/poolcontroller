@@ -3,7 +3,7 @@ import { Room } from './Room';
 import { Logger, LoggerType } from '../services/Logger';
 import { SocketFactory, SocketFactoryType } from '../services/Socket';
 import { PoolSettings, PoolSettingsType } from '../services/PoolSettings';
-import { OperationMode } from '../system/OperationMode';
+import { OperationMode } from 'poolcontroller-protocol';
 import { unknownVersion, missingParameter, outOfRange, Version, Message, Command } from 'poolcontroller-protocol';
 
 @injectable()

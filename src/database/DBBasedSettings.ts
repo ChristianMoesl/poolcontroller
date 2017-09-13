@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { PoolSettings, PoolSettingChangedHandler } from '../services/PoolSettings';
 import { DBConnection, Db } from './DBConnection';
-import { OperationMode } from '../system/OperationMode';
+import { OperationMode } from 'poolcontroller-protocol';
 
 const settingsCollection = 'settings';
 

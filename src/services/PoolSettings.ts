@@ -1,4 +1,4 @@
-import { OperationMode } from '../system/OperationMode';
+import { OperationMode } from 'poolcontroller-protocol';
 
 export type PoolSettingChangedHandler = () => void;
 
